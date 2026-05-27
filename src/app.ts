@@ -2,6 +2,7 @@ import compression from "compression";
 import cors from "cors";
 import express from "express";
 import { prisma } from "./lib/prisma";
+import { userRoute } from "./modules/users/user.route";
 
 const app = express();
 
@@ -16,6 +17,8 @@ app.use(
     credentials: true,
   }),
 );
+
+app.use("/api/v1/user", userRoute);
 
 // Default route for testing
 app.get("/", (_req, res) => {

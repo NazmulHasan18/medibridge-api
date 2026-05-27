@@ -9,4 +9,15 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User'
+export type * from './models/Wallet'
+export type * from './models/Doctor'
+export type * from './models/DoctorSchedule'
+export type * from './models/DoctorSlot'
+export type * from './models/Patient'
+export type * from './models/Appointment'
+export type * from './models/Payment'
+export type * from './models/Transaction'
+export type * from './models/Prescription'
+export type * from './models/Blog'
+export type * from './models/Meeting'
 export type * from './commonInputTypes'

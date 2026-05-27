@@ -86,6 +86,7 @@ model User {
   name     String  @db.VarChar(100)
   email    String  @unique @db.VarChar(255)
   password String?
+  address  String  @db.VarChar(300)
 
   regType RegistrationType @default(EMAIL)
   role    UserRole         @default(PATIENT)
@@ -211,9 +212,7 @@ model Patient {
   id       Int    @id @default(autoincrement())
   publicId String @unique @default(cuid())
 
-  userId      Int       @unique
-  gender      String?
-  dateOfBirth DateTime?
+  userId Int @unique
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -232,6 +231,11 @@ model Appointment {
   doctorId  Int
   patientId Int
   userId    Int
+
+  patientName String    @db.VarChar(100)
+  relation    String    @db.VarChar(100)
+  gender      String?
+  dateOfBirth DateTime?
 
   consultationType  ConsultationType
   appointmentStatus AppointmentStatus @default(PENDING)

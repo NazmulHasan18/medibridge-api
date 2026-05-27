@@ -9,7 +9,94 @@
 * 🟢 You can import this file directly.
 */
 
+export const UserRole = {
+  SUPER_ADMIN: 'SUPER_ADMIN',
+  ADMIN: 'ADMIN',
+  DOCTOR: 'DOCTOR',
+  PATIENT: 'PATIENT'
+} as const
+
+export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const RegistrationType = {
+  EMAIL: 'EMAIL',
+  GOOGLE: 'GOOGLE',
+  FACEBOOK: 'FACEBOOK'
+} as const
+
+export type RegistrationType = (typeof RegistrationType)[keyof typeof RegistrationType]
+
+
+export const UserStatus = {
+  ACTIVE: 'ACTIVE',
+  BLOCKED: 'BLOCKED',
+  PENDING: 'PENDING'
+} as const
+
+export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
+
+
+export const AppointmentStatus = {
+  PENDING: 'PENDING',
+  PAID: 'PAID',
+  CONFIRMED: 'CONFIRMED',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
+  REFUNDED: 'REFUNDED'
+} as const
+
+export type AppointmentStatus = (typeof AppointmentStatus)[keyof typeof AppointmentStatus]
+
+
+export const PaymentStatus = {
+  PENDING: 'PENDING',
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED',
+  REFUNDED: 'REFUNDED'
+} as const
+
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
+
+
+export const ConsultationType = {
+  ONLINE: 'ONLINE',
+  OFFLINE: 'OFFLINE'
+} as const
+
+export type ConsultationType = (typeof ConsultationType)[keyof typeof ConsultationType]
+
+
+export const TransactionType = {
+  APPOINTMENT_PAYMENT: 'APPOINTMENT_PAYMENT',
+  REFERRAL_BONUS: 'REFERRAL_BONUS',
+  REFUND: 'REFUND',
+  ADMIN_ADJUSTMENT: 'ADMIN_ADJUSTMENT',
+  WALLET_TOPUP: 'WALLET_TOPUP',
+  COIN_USAGE: 'COIN_USAGE'
+} as const
+
+export type TransactionType = (typeof TransactionType)[keyof typeof TransactionType]
+
+
+export const TransactionStatus = {
+  PENDING: 'PENDING',
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type TransactionStatus = (typeof TransactionStatus)[keyof typeof TransactionStatus]
+
+
+export const WeekDay = {
+  SATURDAY: 'SATURDAY',
+  SUNDAY: 'SUNDAY',
+  MONDAY: 'MONDAY',
+  TUESDAY: 'TUESDAY',
+  WEDNESDAY: 'WEDNESDAY',
+  THURSDAY: 'THURSDAY',
+  FRIDAY: 'FRIDAY'
+} as const
+
+export type WeekDay = (typeof WeekDay)[keyof typeof WeekDay]

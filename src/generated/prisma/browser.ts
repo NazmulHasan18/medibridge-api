@@ -22,3 +22,58 @@ export * from './enums';
  * 
  */
 export type User = Prisma.UserModel
+/**
+ * Model Wallet
+ * 
+ */
+export type Wallet = Prisma.WalletModel
+/**
+ * Model Doctor
+ * 
+ */
+export type Doctor = Prisma.DoctorModel
+/**
+ * Model DoctorSchedule
+ * 
+ */
+export type DoctorSchedule = Prisma.DoctorScheduleModel
+/**
+ * Model DoctorSlot
+ * 
+ */
+export type DoctorSlot = Prisma.DoctorSlotModel
+/**
+ * Model Patient
+ * 
+ */
+export type Patient = Prisma.PatientModel
+/**
+ * Model Appointment
+ * 
+ */
+export type Appointment = Prisma.AppointmentModel
+/**
+ * Model Payment
+ * 
+ */
+export type Payment = Prisma.PaymentModel
+/**
+ * Model Transaction
+ * 
+ */
+export type Transaction = Prisma.TransactionModel
+/**
+ * Model Prescription
+ * 
+ */
+export type Prescription = Prisma.PrescriptionModel
+/**
+ * Model Blog
+ * 
+ */
+export type Blog = Prisma.BlogModel
+/**
+ * Model Meeting
+ * 
+ */
+export type Meeting = Prisma.MeetingModel
