@@ -31,9 +31,9 @@ export const createUserSchema = z
     password: z.string().min(6, "Password must be at least 6 characters").optional(),
     referredByCode: z.string().optional(),
 
-    address: z.string().min(5, "Address is required").max(300),
+    address: z.string().min(5).max(300).optional(),
 
-    role: z.enum(["PATIENT", "DOCTOR"]).default("PATIENT"),
+    role: z.enum(["PATIENT", "DOCTOR"]).optional().default("PATIENT"),
 
     regType: z.enum(["EMAIL", "GOOGLE", "FACEBOOK"]).optional().default("EMAIL"),
 

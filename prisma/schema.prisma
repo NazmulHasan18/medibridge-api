@@ -86,7 +86,7 @@ model User {
   name     String  @db.VarChar(100)
   email    String  @unique @db.VarChar(255)
   password String?
-  address  String  @db.VarChar(300)
+  address  String? @db.VarChar(300)
 
   regType RegistrationType @default(EMAIL)
   role    UserRole         @default(PATIENT)
