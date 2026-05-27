@@ -5,8 +5,13 @@ import { Prisma } from "../generated/prisma/client";
 const handlePrismaError = (err: Prisma.PrismaClientKnownRequestError): AppError => {
   switch (err.code) {
     case "P2002": {
-      const fields = (err.meta?.target as string[])?.join(", ");
-      return new AppError(`Duplicate field value: ${fields}`, 409);
+      const meta = err.meta as any;
+
+      const fields = meta?.target || meta?.driverAdapterError?.cause?.constraint?.fields || [];
+
+      const formatted = Array.isArray(fields) ? fields.join(", ") : String(fields);
+
+      return new AppError(`${formatted} already exists`, 409);
     }
     case "P2025":
       return new AppError((err.meta?.cause as string) || "Record not found", 404);

@@ -1,11 +1,17 @@
 import { Request, Response } from "express";
 import { UserService } from "./user.service";
+import catchAsync from "../../utils/catchAsync";
+import sendResponse from "../../utils/sendResponse";
 
-const createUser = async (req: Request, res: Response) => {
+const createUser = catchAsync(async (req: Request, res: Response) => {
+  if (req.file?.path) {
+    req.body.profileImage = req.file?.path;
+  }
+
   const result = await UserService.createUser(req.body);
 
-  res.status(201).json(result);
-};
+  sendResponse(res, { data: result });
+});
 
 export const UserController = {
   createUser,
