@@ -1,4 +1,3 @@
-
 # Next Blog Starter
 
 A simple **Blog Application Starter Pack** built with **TypeScript, Express.js**.  
@@ -7,6 +6,7 @@ This project is designed for the **Next Level Web Development Bootcamp** to help
 ---
 
 ## Features
+
 - TypeScript + Express.js setup
 - Modular project structure
 - Environment configuration with `dotenv`
@@ -90,12 +90,7 @@ pnpm start
 
 ---
 
-## Learning Objective
+## Important Docs Link
 
-This starter pack is part of the **Next Level Web Development Bootcamp** curriculum.
-By using this project, students will learn how to:
-
-* Connect a Node.js app with Prisma ORM
-* Build modular APIs
-* Manage environment variables
-* Structure scalable backend projects
+- Project Overview - [https://docs.google.com/document/d/1oJNhs9dYbdlLBxWPY2MuMxhHNZJTXlWZfPhXs5dtdSc/edit?tab=t.tpbf5nj3qoz4]
+- ERD Diagram - [https://lucid.app/lucidchart/df76cc55-7f6a-4d21-93bf-bfc31eafff5e/edit?view_items=~LW0iTMIlcXW&page=0_0&invitationId=inv_e7b0e1a3-93fa-4c69-a627-d2c84f55a706]

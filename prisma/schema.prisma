@@ -1,0 +1,356 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  DOCTOR
+  PATIENT
+}
+
+enum RegistrationType {
+  EMAIL
+  GOOGLE
+  FACEBOOK
+}
+
+enum UserStatus {
+  ACTIVE
+  BLOCKED
+  PENDING
+}
+
+enum AppointmentStatus {
+  PENDING
+  PAID
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  REFUNDED
+}
+
+enum ConsultationType {
+  ONLINE
+  OFFLINE
+}
+
+enum TransactionType {
+  APPOINTMENT_PAYMENT
+  REFERRAL_BONUS
+  REFUND
+  ADMIN_ADJUSTMENT
+  WALLET_TOPUP
+  COIN_USAGE
+}
+
+enum TransactionStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  CANCELLED
+}
+
+enum WeekDay {
+  SATURDAY
+  SUNDAY
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+}
+
+// =========================User Model===========================
+model User {
+  id       Int    @id @default(autoincrement())
+  publicId String @unique @default(cuid())
+
+  name     String  @db.VarChar(100)
+  email    String  @unique @db.VarChar(255)
+  password String?
+
+  regType RegistrationType @default(EMAIL)
+  role    UserRole         @default(PATIENT)
+  status  UserStatus       @default(ACTIVE)
+
+  phone        String? @unique @db.VarChar(20)
+  profileImage String?
+
+  referralCode String @unique
+
+  isVerified      Boolean   @default(false)
+  emailVerifiedAt DateTime?
+
+  wallet  Wallet?
+  doctor  Doctor?
+  patient Patient?
+
+  transactions Transaction[]
+  appointments Appointment[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+// =========================Wallet Model===========================
+
+model Wallet {
+  id Int @id @default(autoincrement())
+
+  userId      Int   @unique
+  balance     Float @default(0)
+  totalEarned Float @default(0)
+  totalSpent  Float @default(0)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ===========================Doctor Model===========================
+model Doctor {
+  id       Int    @id @default(autoincrement())
+  publicId String @unique @default(cuid())
+
+  userId          Int     @unique
+  specialization  String
+  experience      Int
+  consultationFee Float
+  qualification   String?
+  bio             String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  schedules     DoctorSchedule[]
+  appointments  Appointment[]
+  blogs         Blog[]
+  prescriptions Prescription[]
+
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  doctorSlots DoctorSlot[]
+}
+
+// ===========================Doctor Schedule Model===========================
+
+model DoctorSchedule {
+  id Int @id @default(autoincrement())
+
+  doctorId Int
+
+  day WeekDay
+
+  startTime String
+  endTime   String
+
+  slotDuration Int
+
+  maxPatients Int? @default(1)
+
+  isActive Boolean @default(true)
+
+  doctor Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+
+  slots DoctorSlot[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([doctorId])
+  @@index([day])
+}
+
+// ===========================Doctor Slot Model===========================
+model DoctorSlot {
+  id Int @id @default(autoincrement())
+
+  doctorId   Int
+  scheduleId Int
+
+  startTime DateTime
+  endTime   DateTime
+
+  isBooked    Boolean @default(false)
+  isCancelled Boolean @default(false)
+
+  doctor Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+
+  schedule DoctorSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+
+  appointment Appointment? @relation(fields: [appointmentId], references: [id])
+
+  createdAt     DateTime @default(now())
+  appointmentId Int?
+
+  @@index([doctorId])
+  @@index([startTime])
+}
+
+// ===========================Patient Model===========================
+model Patient {
+  id       Int    @id @default(autoincrement())
+  publicId String @unique @default(cuid())
+
+  userId      Int       @unique
+  gender      String?
+  dateOfBirth DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  appointments  Appointment[]
+  prescriptions Prescription[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ===========================Appointment Model===========================
+model Appointment {
+  id       Int    @id @default(autoincrement())
+  publicId String @unique @default(cuid())
+
+  doctorId  Int
+  patientId Int
+  userId    Int
+
+  consultationType  ConsultationType
+  appointmentStatus AppointmentStatus @default(PENDING)
+
+  appointmentDate DateTime
+  notes           String?
+
+  doctor  Doctor  @relation(fields: [doctorId], references: [id])
+  patient Patient @relation(fields: [patientId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+
+  payment      Payment?
+  prescription Prescription?
+  meeting      Meeting?
+
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  transactions Transaction[]
+  doctorSlots  DoctorSlot[]
+}
+
+// ===========================Payment Model===========================
+model Payment {
+  id       Int    @id @default(autoincrement())
+  publicId String @unique @default(cuid())
+
+  appointmentId Int @unique
+
+  amount        Float
+  gateway       String
+  transactionId String @unique
+
+  paymentStatus PaymentStatus @default(PENDING)
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id])
+
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  transactions Transaction[]
+}
+
+// =========================Transaction Model===========================
+model Transaction {
+  id       Int    @id @default(autoincrement())
+  publicId String @unique @default(cuid())
+
+  userId        Int
+  appointmentId Int?
+  paymentId     Int?
+
+  type   TransactionType
+  status TransactionStatus @default(PENDING)
+
+  amount          Float
+  previousBalance Float
+  currentBalance  Float
+
+  note String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  appointment Appointment? @relation(fields: [appointmentId], references: [id])
+  payment     Payment?     @relation(fields: [paymentId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([type])
+  @@index([status])
+}
+
+// ===========================Prescription Model===========================
+model Prescription {
+  id Int @id @default(autoincrement())
+
+  appointmentId Int @unique
+  doctorId      Int
+  patientId     Int
+
+  symptoms  String?
+  medicines Json
+  advice    String?
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id])
+  doctor      Doctor      @relation(fields: [doctorId], references: [id])
+  patient     Patient     @relation(fields: [patientId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+// ===========================Blog Model===========================
+model Blog {
+  id       Int    @id @default(autoincrement())
+  publicId String @unique @default(cuid())
+
+  doctorId Int
+
+  title     String
+  slug      String  @unique
+  content   String
+  thumbnail String?
+
+  doctor Doctor @relation(fields: [doctorId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ===========================Meeting Model===========================
+model Meeting {
+  id Int @id @default(autoincrement())
+
+  appointmentId Int @unique
+
+  meetingLink String
+  meetingTime DateTime
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id])
+
+  createdAt DateTime @default(now())
+}
