@@ -10,8 +10,8 @@ const generateReferralCode = () => {
 
 const createUser = async (data: CreateUserPayload) => {
   const { doctor, password, referredByCode, ...user } = data;
-  console.log(data);
   // check existing user
+
   const existingUser = await prisma.user.findUnique({
     where: {
       email: user.email,
