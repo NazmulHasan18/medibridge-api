@@ -6,6 +6,7 @@ import { userRoute } from "./modules/users/user.route";
 import globalErrorHandler from "./errors/globalErrorHandler";
 import { AuthRoute } from "./modules/auth/auth.route";
 import cookieParser from "cookie-parser";
+import morgan from "morgan";
 const app = express();
 
 // Middleware
@@ -20,6 +21,7 @@ app.use(
     credentials: true,
   }),
 );
+app.use(morgan("tiny"));
 
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/auth", AuthRoute);

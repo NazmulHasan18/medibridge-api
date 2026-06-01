@@ -48,13 +48,9 @@ const createUser = async (data: CreateUserPayload) => {
     userData.doctor = {
       create: {
         specialization: doctor.specialization,
-
         experience: doctor.experience ?? 0,
-
         consultationFee: doctor.consultationFee ?? 0,
-
         qualification: doctor.qualification ?? "",
-
         bio: doctor.bio ?? "",
       },
     };

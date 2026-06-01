@@ -1,6 +1,7 @@
 import http, { Server } from "http";
 import app from "./app";
 import dotenv from "dotenv";
+import { seedSuperAdmin } from "./utils/seed";
 
 dotenv.config();
 
@@ -9,6 +10,7 @@ let server: Server | null = null;
 async function startServer() {
   try {
     server = http.createServer(app);
+    await seedSuperAdmin();
     server.listen(process.env.PORT, () => {
       console.log(`🚀 Server is running on port ${process.env.PORT}`);
     });
