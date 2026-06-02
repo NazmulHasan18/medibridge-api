@@ -1,8 +1,8 @@
 import bcrypt from "bcryptjs";
-import { Prisma } from "../../generated/prisma/client.js";
 import { prisma } from "../../lib/prisma.js";
 import type { CreateUserPayload } from "./user.validations.js";
 import { nanoid } from "nanoid";
+import { Prisma } from "@prisma/client";
 
 const generateReferralCode = () => {
   return nanoid(8).toUpperCase();

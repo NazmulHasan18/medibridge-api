@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import { SafeUser } from "./auth.type.js";
 import { prisma } from "../../lib/prisma.js";
 import AppError from "../../errors/AppError.js";
-import { RegistrationType, UserRole, UserStatus } from "../../generated/prisma/enums.js";
+import { RegistrationType, UserRole, UserStatus, User } from "@prisma/client";
 import {
   buildAccessPayload,
   signAccessToken,
@@ -10,7 +10,6 @@ import {
   verifySessionToken,
 } from "../../utils/token.js";
 import { UserService } from "../users/user.service.js";
-import { User } from "../../generated/prisma/client.js";
 
 // ─── Helpers ────────────────────────────────────────────────
 const excludePassword = (user: User): SafeUser => {
