@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 dotenv.config({ path: process.cwd() + "/env" });
 
 export const config = {
+  dbUrl: process.env.DATABASE_URL as string,
   accessSecret: process.env.JWT_ACCESS_SECRET as string,
   sessionSecret: process.env.JWT_SESSION_SECRET as string,
   cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET as string,
