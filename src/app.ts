@@ -10,7 +10,13 @@ import { doctorRoute } from "./modules/doctor/doctor.route.js";
 const app = express();
 
 // Middleware
-app.use(cors());
+// app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "https://medibridge-patient.vercel.app"],
+    credentials: true,
+  }),
+);
 app.use(compression());
 app.use(express.json());
 app.use(cookieParser());
