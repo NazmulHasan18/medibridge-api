@@ -21,6 +21,13 @@ app.use(
     credentials: true,
   }),
 );
+app.use(
+  cors({
+    origin: "https://medibridge-patient.vercel.app",
+    credentials: true,
+  }),
+);
+
 app.use(morgan("tiny"));
 
 app.use("/api/v1/doctors", doctorRoute);
