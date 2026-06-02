@@ -1,6 +1,6 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { config } from "../config";
-import { SessionPayload } from "../modules/auth/auth.type";
+import { SessionPayload } from "../modules/auth/auth.type.js";
 
 export const signAccessToken = (payload: JwtPayload): string =>
   jwt.sign(payload, config.accessSecret, { expiresIn: "24h" });

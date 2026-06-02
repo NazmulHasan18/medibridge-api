@@ -1,11 +1,16 @@
 import bcrypt from "bcrypt";
-import { SafeUser } from "./auth.type";
-import { prisma } from "../../lib/prisma";
-import AppError from "../../errors/AppError";
-import { RegistrationType, UserRole, UserStatus } from "../../generated/prisma/enums";
-import { buildAccessPayload, signAccessToken, signSessionToken, verifySessionToken } from "../../utils/token";
-import { UserService } from "../users/user.service";
-import { User } from "../../generated/prisma/client";
+import { SafeUser } from "./auth.type.js";
+import { prisma } from "../../lib/prisma.js";
+import AppError from "../../errors/AppError.js";
+import { RegistrationType, UserRole, UserStatus } from "../../generated/prisma/enums.js";
+import {
+  buildAccessPayload,
+  signAccessToken,
+  signSessionToken,
+  verifySessionToken,
+} from "../../utils/token.js";
+import { UserService } from "../users/user.service.js";
+import { User } from "../../generated/prisma/client.js";
 
 // ─── Helpers ────────────────────────────────────────────────
 const excludePassword = (user: User): SafeUser => {

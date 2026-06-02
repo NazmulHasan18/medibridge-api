@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import catchAsync from "../../utils/catchAsync";
-import { AuthService } from "./auth.service";
-import sendResponse from "../../utils/sendResponse";
-import AppError from "../../errors/AppError";
+import catchAsync from "../../utils/catchAsync.js";
+import { AuthService } from "./auth.service.js";
+import sendResponse from "../../utils/sendResponse.js";
+import AppError from "../../errors/AppError.js";
 
 const login = catchAsync(async (req: Request, res: Response) => {
   const result = await AuthService.login(req.body);

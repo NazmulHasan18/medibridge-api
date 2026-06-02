@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { DoctorService } from "./doctor.service";
-import catchAsync from "../../utils/catchAsync";
-import sendResponse from "../../utils/sendResponse";
+import { DoctorService } from "./doctor.service.js";
+import catchAsync from "../../utils/catchAsync.js";
+import sendResponse from "../../utils/sendResponse.js";
 
 const getAllDoctor = catchAsync(async (req: Request, res: Response) => {
   const { search, page, limit, specialization } = req?.query;

@@ -1,7 +1,7 @@
 import http, { Server } from "http";
 import app from "./app.js";
 import dotenv from "dotenv";
-import { seedSuperAdmin } from "./utils/seed";
+import { seedSuperAdmin } from "./utils/seed.js";
 
 dotenv.config();
 

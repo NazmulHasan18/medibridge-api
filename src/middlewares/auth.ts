@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import AppError from "../errors/AppError";
-import { UserRole, UserStatus } from "../generated/prisma/enums";
-import { prisma } from "../lib/prisma";
-import type { JwtPayload as AuthJwtPayload } from "../modules/auth/auth.type";
-import { verifyAccessToken } from "../utils/token";
+import AppError from "../errors/AppError.js";
+import { UserRole, UserStatus } from "../generated/prisma/enums.js";
+import { prisma } from "../lib/prisma.js";
+import type { JwtPayload as AuthJwtPayload } from "../modules/auth/auth.type.js";
+import { verifyAccessToken } from "../utils/token.js";
 
 declare global {
   namespace Express {

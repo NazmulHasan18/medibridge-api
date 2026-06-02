@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { UserController } from "./user.controller";
-import { validate } from "../../middlewares/validator";
-import { createUserSchema } from "./user.validations";
-import { upload } from "../../middlewares/uploader";
-import { parseJsonFields } from "../../middlewares/parser";
+import { UserController } from "./user.controller.js";
+import { validate } from "../../middlewares/validator.js";
+import { createUserSchema } from "./user.validations.js";
+import { upload } from "../../middlewares/uploader.js";
+import { parseJsonFields } from "../../middlewares/parser.js";
 
 const router = Router();
 

@@ -1,13 +1,12 @@
 import compression from "compression";
 import cors from "cors";
 import express from "express";
-import { prisma } from "./lib/prisma";
-import { userRoute } from "./modules/users/user.route";
-import globalErrorHandler from "./errors/globalErrorHandler";
-import { AuthRoute } from "./modules/auth/auth.route";
+import { userRoute } from "./modules/users/user.route.js";
+import globalErrorHandler from "./errors/globalErrorHandler.js";
+import { AuthRoute } from "./modules/auth/auth.route.js";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
-import { doctorRoute } from "./modules/doctor/doctor.route";
+import { doctorRoute } from "./modules/doctor/doctor.route.js";
 const app = express();
 
 // Middleware

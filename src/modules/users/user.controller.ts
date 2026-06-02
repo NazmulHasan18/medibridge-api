@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { UserService } from "./user.service";
-import catchAsync from "../../utils/catchAsync";
-import sendResponse from "../../utils/sendResponse";
+import { UserService } from "./user.service.js";
+import catchAsync from "../../utils/catchAsync.js";
+import sendResponse from "../../utils/sendResponse.js";
 
 const createUser = catchAsync(async (req: Request, res: Response) => {
   if (req.file?.path) {

@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
-import { prisma } from "../lib/prisma";
-import { RegistrationType, UserRole, UserStatus } from "../generated/prisma/enums";
+import { prisma } from "../lib/prisma.js";
+import { RegistrationType, UserRole, UserStatus } from "../generated/prisma/enums.js";
 
 export async function seedSuperAdmin() {
   const email = "superadmin@example.com";
