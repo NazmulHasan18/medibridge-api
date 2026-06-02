@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx watch src/server.ts",
-    "build": "prisma generate && prisma migrate deploy && tsc",
+    "build": "npx prisma generate && npx prisma migrate deploy && tsc",
     "start": "node dist/server.js",
     "prisma:build": "npx prisma generate",
     "prisma:migrate": "npx prisma migrate dev"
