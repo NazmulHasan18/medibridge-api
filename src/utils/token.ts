@@ -1,5 +1,5 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { config } from "../config";
+import { config } from "../config/index.js";
 import { SessionPayload } from "../modules/auth/auth.type.js";
 
 export const signAccessToken = (payload: JwtPayload): string =>

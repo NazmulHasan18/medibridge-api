@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "bundler",
+    "ignoreDeprecations": "6.0",
+    "forceConsistentCasingInFileNames": true,
     "target": "ES2023",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "rootDir": "./src",
+    "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
-    "ignoreDeprecations": "6.0",
-    "rootDir": "./src",
     "types": ["node"],
-    "outDir": "./dist",
-    "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
   "include": ["src/**/*"],

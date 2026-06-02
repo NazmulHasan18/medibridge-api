@@ -66,7 +66,7 @@ const getAllDoctor = async ({
       limit,
       totalPages: Math.ceil(total / limit),
     },
-    specializations: specializations.map((s) => s.specialization),
+    specializations: specializations.map((s: { specialization: string }) => s.specialization),
   };
 };
 

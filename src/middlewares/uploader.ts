@@ -4,7 +4,7 @@ import multer from "multer";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import { v2 as cloudinary } from "cloudinary";
 import { Request } from "express";
-import { config } from "../config";
+import { config } from "../config/index.js";
 
 // cloudinary config
 cloudinary.config({
