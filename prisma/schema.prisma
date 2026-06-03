@@ -134,6 +134,7 @@ model Doctor {
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
   doctorSlots     DoctorSlot[]
+  deletedAt       DateTime?
 }
 
 // ===========================Doctor Schedule Model===========================
@@ -185,6 +186,7 @@ model Patient {
   prescriptions Prescription[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
+  deletedAt     DateTime?
 }
 
 // ===========================Appointment Model===========================
