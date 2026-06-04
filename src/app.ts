@@ -7,6 +7,7 @@ import { AuthRoute } from "./modules/auth/auth.route.js";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import { doctorRoute } from "./modules/doctor/doctor.route.js";
+import { scheduleRoute } from "./modules/doctor.schedule/schedule.route.js";
 const app = express();
 
 // Middleware
@@ -23,6 +24,7 @@ app.use(cookieParser());
 
 app.use(morgan("tiny"));
 
+app.use("/api/v1/doctors-schedule/:publicId", scheduleRoute);
 app.use("/api/v1/doctors", doctorRoute);
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/auth", AuthRoute);
