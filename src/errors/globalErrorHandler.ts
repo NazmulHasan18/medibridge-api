@@ -27,6 +27,8 @@ const handlePrismaError = (err: Prisma.PrismaClientKnownRequestError): AppError 
 };
 
 const globalErrorHandler = (err: Error, _req: Request, res: Response, _next: NextFunction): void => {
+  console.log(err);
+
   let error = err as AppError;
 
   // Handle Prisma known request errors

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Failed – MediBridge</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: #f0f4f8;
+      font-family: 'DM Sans', sans-serif;
+      color: #1a2332;
+      padding: 40px 16px;
+    }
+
+    .wrapper { max-width: 600px; margin: 0 auto; }
+
+    .header {
+      background: linear-gradient(135deg, #7f1d1d 0%, #dc2626 100%);
+      border-radius: 16px 16px 0 0;
+      padding: 36px 40px 28px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 160px; height: 160px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 50%;
+    }
+    .logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 26px;
+      color: #ffffff;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+    .logo span { color: #fca5a5; }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 100px;
+      padding: 6px 18px;
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .status-dot { width: 8px; height: 8px; background: #fca5a5; border-radius: 50%; }
+
+    .card {
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 0 0 16px 16px;
+      box-shadow: 0 4px 24px rgba(220,38,38,0.08);
+    }
+
+    /* Alert icon */
+    .alert-icon-wrapper {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .alert-icon {
+      width: 72px; height: 72px;
+      background: #fee2e2;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+    }
+
+    .greeting {
+      font-family: 'DM Serif Display', serif;
+      font-size: 28px;
+      color: #7f1d1d;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .subtitle {
+      color: #64748b;
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    /* Reasons block */
+    .reasons-block {
+      background: #fff5f5;
+      border: 1px solid #fecaca;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 28px;
+    }
+    .reasons-title {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #dc2626;
+      margin-bottom: 14px;
+    }
+    .reason-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 0;
+      font-size: 14px;
+      color: #5f2120;
+    }
+    .reason-bullet {
+      width: 6px; height: 6px;
+      background: #dc2626;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .cta-wrapper { text-align: center; margin: 32px 0 28px; }
+    .cta-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #7f1d1d, #dc2626);
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px 36px;
+      border-radius: 100px;
+      font-size: 15px;
+      font-weight: 600;
+      box-shadow: 0 4px 16px rgba(220,38,38,0.35);
+    }
+
+    .divider { border: none; border-top: 1px solid #e2e8f0; margin: 28px 0; }
+
+    .note {
+      background: #fffbeb;
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-size: 13px;
+      color: #78350f;
+      line-height: 1.6;
+    }
+    .note strong { color: #92400e; }
+
+    .footer {
+      text-align: center;
+      padding: 28px 16px 0;
+      color: #94a3b8;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+    .footer a { color: #dc2626; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <div class="logo">Medi<span>Bridge</span></div><br>
+      <div class="status-badge">
+        <div class="status-dot"></div>
+        Payment Failed
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="alert-icon-wrapper">
+        <div class="alert-icon">⚠️</div>
+      </div>
+
+      <div class="greeting">Payment Unsuccessful</div>
+      <p class="subtitle">
+        Hi {{patientName}}, we were unable to process the payment for your appointment. Your booking is currently on hold.
+      </p>
+
+      <div class="reasons-block">
+        <div class="reasons-title">Common Reasons for Failure</div>
+        <div class="reason-item"><span class="reason-bullet"></span> Insufficient account balance</div>
+        <div class="reason-item"><span class="reason-bullet"></span> Incorrect card details</div>
+        <div class="reason-item"><span class="reason-bullet"></span> Bank declined the transaction</div>
+        <div class="reason-item"><span class="reason-bullet"></span> Network or timeout issue</div>
+      </div>
+
+      <div class="cta-wrapper">
+        <a href="#" class="cta-btn">Retry Payment Now</a>
+      </div>
+
+      <hr class="divider">
+
+      <div class="note">
+        <strong>⏳ Important:</strong> Your appointment slot will be held for a limited time. Please complete the payment as soon as possible to confirm your booking. If the issue persists, contact your bank or our support team.
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>© 2025 MediBridge. All rights reserved.</p>
+      <p><a href="#">Support</a> · <a href="#">My Appointments</a> · <a href="#">Unsubscribe</a></p>
+    </div>
+  </div>
+</body>
+</html>

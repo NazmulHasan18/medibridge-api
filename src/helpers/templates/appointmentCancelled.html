@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Appointment Cancelled – MediBridge</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: #f0f4f8;
+      font-family: 'DM Sans', sans-serif;
+      color: #1a2332;
+      padding: 40px 16px;
+    }
+
+    .wrapper { max-width: 600px; margin: 0 auto; }
+
+    .header {
+      background: linear-gradient(135deg, #374151 0%, #6b7280 100%);
+      border-radius: 16px 16px 0 0;
+      padding: 36px 40px 28px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 160px; height: 160px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 50%;
+    }
+    .logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 26px;
+      color: #ffffff;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+    .logo span { color: #d1d5db; }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 100px;
+      padding: 6px 18px;
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .status-dot { width: 8px; height: 8px; background: #d1d5db; border-radius: 50%; }
+
+    .card {
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 0 0 16px 16px;
+      box-shadow: 0 4px 24px rgba(107,114,128,0.10);
+    }
+
+    .cancel-icon-wrapper {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .cancel-icon {
+      width: 72px; height: 72px;
+      background: #f3f4f6;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+    }
+
+    .greeting {
+      font-family: 'DM Serif Display', serif;
+      font-size: 28px;
+      color: #374151;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .subtitle {
+      color: #64748b;
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    /* Refund info */
+    .refund-block {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 28px;
+    }
+    .refund-title {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #16a34a;
+      margin-bottom: 10px;
+    }
+    .refund-text {
+      font-size: 14px;
+      color: #14532d;
+      line-height: 1.6;
+    }
+
+    /* Re-book CTA */
+    .cta-wrapper { text-align: center; margin: 32px 0 28px; }
+    .cta-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #0a6e6e, #0d9488);
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px 36px;
+      border-radius: 100px;
+      font-size: 15px;
+      font-weight: 600;
+      box-shadow: 0 4px 16px rgba(13,148,136,0.30);
+    }
+    .cta-secondary {
+      display: block;
+      text-align: center;
+      margin-top: 12px;
+      font-size: 13px;
+      color: #94a3b8;
+    }
+    .cta-secondary a { color: #6b7280; text-decoration: underline; }
+
+    .divider { border: none; border-top: 1px solid #e2e8f0; margin: 28px 0; }
+
+    .note {
+      background: #fffbeb;
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-size: 13px;
+      color: #78350f;
+      line-height: 1.6;
+    }
+    .note strong { color: #92400e; }
+
+    .footer {
+      text-align: center;
+      padding: 28px 16px 0;
+      color: #94a3b8;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+    .footer a { color: #6b7280; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <div class="logo">Medi<span>Bridge</span></div><br>
+      <div class="status-badge">
+        <div class="status-dot"></div>
+        Appointment Cancelled
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cancel-icon-wrapper">
+        <div class="cancel-icon">❌</div>
+      </div>
+
+      <div class="greeting">Appointment Cancelled</div>
+      <p class="subtitle">
+        Hi {{patientName}}, your appointment has been successfully cancelled as requested. We hope to see you again soon.
+      </p>
+
+      <div class="refund-block">
+        <div class="refund-title">💳 Refund Information</div>
+        <div class="refund-text">
+          If a payment was made, a refund will be processed to your original payment method within <strong>5–7 business days</strong>, subject to our cancellation policy.
+        </div>
+      </div>
+
+      <div class="cta-wrapper">
+        <a href="#" class="cta-btn">Book a New Appointment</a>
+        <div class="cta-secondary">
+          Need help? <a href="#">Contact Support</a>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="note">
+        <strong>📌 Note:</strong> Repeated last-minute cancellations may affect your ability to book future appointments. If you had an emergency, we understand — please reach out to our support team if you need assistance.
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>© 2025 MediBridge. All rights reserved.</p>
+      <p><a href="#">Find a Doctor</a> · <a href="#">Help Center</a> · <a href="#">Unsubscribe</a></p>
+    </div>
+  </div>
+</body>
+</html>

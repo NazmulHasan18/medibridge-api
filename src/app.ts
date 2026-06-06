@@ -8,6 +8,8 @@ import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import { doctorRoute } from "./modules/doctor/doctor.route.js";
 import { scheduleRoute } from "./modules/doctor.schedule/schedule.route.js";
+import { appointmentRoutes } from "./modules/appointments/appointments.route.js";
+import { sendEmail } from "./helpers/sendEmail.js";
 const app = express();
 
 // Middleware
@@ -24,10 +26,24 @@ app.use(cookieParser());
 
 app.use(morgan("tiny"));
 
+app.use("/api/v1/appointment", appointmentRoutes);
 app.use("/api/v1/doctors-schedule/:publicId", scheduleRoute);
 app.use("/api/v1/doctors", doctorRoute);
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/auth", AuthRoute);
+
+app.get("/test", async (req, res) => {
+  const response = await sendEmail({
+    to: "nazmul182218@gmail.com",
+    subject: "New Appointment Booked",
+    template: "newAppointmentDoctor",
+    data: {
+      patientName: "patientName",
+      appointmentDate: String(new Date()),
+    },
+  });
+  res.json({ response });
+});
 
 // Default route for testing
 app.get("/", (_req, res) => {

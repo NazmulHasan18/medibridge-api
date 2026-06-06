@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Appointment Confirmed – MediBridge</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: #f0f4f8;
+      font-family: 'DM Sans', sans-serif;
+      color: #1a2332;
+      padding: 40px 16px;
+    }
+
+    .wrapper {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #0a6e6e 0%, #0d9488 100%);
+      border-radius: 16px 16px 0 0;
+      padding: 36px 40px 28px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 160px; height: 160px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 50%;
+    }
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -50px; left: -20px;
+      width: 120px; height: 120px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 50%;
+    }
+    .logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 26px;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+    .logo span {
+      color: #5eead4;
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 100px;
+      padding: 6px 18px;
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .status-dot {
+      width: 8px; height: 8px;
+      background: #86efac;
+      border-radius: 50%;
+    }
+
+    /* Body card */
+    .card {
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 0 0 16px 16px;
+      box-shadow: 0 4px 24px rgba(10,110,110,0.08);
+    }
+
+    .greeting {
+      font-family: 'DM Serif Display', serif;
+      font-size: 28px;
+      color: #0a6e6e;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      color: #64748b;
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    /* Info block */
+    .info-block {
+      background: #f8fdfc;
+      border: 1px solid #ccfbf1;
+      border-left: 4px solid #0d9488;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 28px;
+    }
+    .info-block-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #0d9488;
+      margin-bottom: 16px;
+    }
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 10px 0;
+      border-bottom: 1px solid #e0f2f1;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-icon {
+      width: 36px; height: 36px;
+      background: #e6faf8;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .info-label {
+      font-size: 11px;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 2px;
+    }
+    .info-value {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1a2332;
+    }
+
+    /* Consultation type badge */
+    .consult-badge {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .consult-online {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+    .consult-offline {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    /* CTA */
+    .cta-wrapper { text-align: center; margin: 32px 0 28px; }
+    .cta-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #0a6e6e, #0d9488);
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px 36px;
+      border-radius: 100px;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      box-shadow: 0 4px 16px rgba(13,148,136,0.35);
+    }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1px solid #e2e8f0;
+      margin: 28px 0;
+    }
+
+    /* Note */
+    .note {
+      background: #fffbeb;
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-size: 13px;
+      color: #78350f;
+      line-height: 1.6;
+    }
+    .note strong { color: #92400e; }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 28px 16px 0;
+      color: #94a3b8;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+    .footer a { color: #0d9488; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <div class="logo">Medi<span>Bridge</span></div><br>
+      <div class="status-badge">
+        <div class="status-dot"></div>
+        Appointment Confirmed
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="greeting">You're all set, {{patientName}}!</div>
+      <p class="subtitle">
+        Your appointment has been successfully confirmed. Please review the details below and make sure to be available at the scheduled time.
+      </p>
+
+      <div class="info-block">
+        <div class="info-block-title">📋 Appointment Details</div>
+
+        <div class="info-row">
+          <div class="info-icon">👨‍⚕️</div>
+          <div>
+            <div class="info-label">Doctor</div>
+            <div class="info-value">Dr. {{doctorName}}</div>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-icon">📅</div>
+          <div>
+            <div class="info-label">Date &amp; Time</div>
+            <div class="info-value">{{appointmentDate}}</div>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-icon">🏥</div>
+          <div>
+            <div class="info-label">Consultation Type</div>
+            <div class="info-value">
+              <span class="consult-badge consult-online">{{consultationType}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-wrapper">
+        <a href="#" class="cta-btn">View Appointment Details</a>
+      </div>
+
+      <hr class="divider">
+
+      <div class="note">
+        <strong>📌 Reminder:</strong> Please arrive 10 minutes early for in-person visits, or ensure your internet connection is stable for online consultations. If you need to reschedule, please do so at least 2 hours in advance.
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>© 2025 MediBridge. All rights reserved.</p>
+      <p><a href="#">Manage Appointments</a> · <a href="#">Help Center</a> · <a href="#">Unsubscribe</a></p>
+    </div>
+  </div>
+</body>
+</html>
