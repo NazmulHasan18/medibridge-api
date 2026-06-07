@@ -102,7 +102,7 @@ const rescheduleAppointment = catchAsync(async (req: Request, res: Response) => 
   }
 
   const { publicId } = req.params;
-  const result = await appointmentService.rescheduleAppointment(userId, publicId, req.body);
+  const result = await appointmentService.rescheduleAppointment(publicId, req.body);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

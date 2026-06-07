@@ -25,14 +25,14 @@ router.get("/my-appointments", auth(UserRole.PATIENT), appointmentController.get
 // Single appointment
 router.get(
   "/:publicId",
-  auth(UserRole.PATIENT, UserRole.DOCTOR, UserRole.ADMIN),
+  auth(UserRole.PATIENT, UserRole.DOCTOR, UserRole.ADMIN, UserRole.SUPER_ADMIN),
   appointmentController.getAppointmentByPublicId,
 );
 
 // Reschedule
 router.patch(
   "/:publicId/reschedule",
-  auth(UserRole.PATIENT),
+  auth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
   validate(paymentValidationSchema.rescheduleAppointment),
   appointmentController.rescheduleAppointment,
 );

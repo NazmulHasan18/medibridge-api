@@ -245,13 +245,22 @@ const generateSlots = async (doctorPublicId: string, scheduleId: number, input: 
 const getSlotsByDoctor = async (doctorPublicId: string, query: GetSlotsByDoctorQuery) => {
   const doctor = await resolveDoctorByPublicId(doctorPublicId);
 
+  const page = Number(query.page) || 1;
+  const limit = Number(query.limit) || 10;
+
+  const skip = (page - 1) * limit;
+
   const where: Prisma.DoctorSlotWhereInput = {
     doctorId: doctor.id,
-    startTime: { gte: new Date() },
+    startTime: {
+      gte: new Date(),
+    },
+
     ...(query.available !== undefined && {
       isBooked: !query.available,
       isCancelled: false,
     }),
+
     ...(query.date && {
       startTime: {
         gte: new Date(`${query.date}T00:00:00`),
@@ -260,11 +269,33 @@ const getSlotsByDoctor = async (doctorPublicId: string, query: GetSlotsByDoctorQ
     }),
   };
 
-  return prisma.doctorSlot.findMany({
-    where,
-    include: { schedule: true },
-    orderBy: { startTime: "asc" },
-  });
+  const [slots, total] = await prisma.$transaction([
+    prisma.doctorSlot.findMany({
+      where,
+      include: {
+        schedule: true,
+      },
+      orderBy: {
+        startTime: "asc",
+      },
+      skip,
+      take: limit,
+    }),
+
+    prisma.doctorSlot.count({
+      where,
+    }),
+  ]);
+
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit),
+    },
+    data: slots,
+  };
 };
 
 /** Cancel a slot (sets isCancelled = true). Cannot cancel already-booked slots. */

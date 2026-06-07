@@ -48,11 +48,6 @@ const createAppointment = async (
     include: { doctor: { include: { user: true } } },
   });
 
-  if (!slot) throw new AppError("Slot not found", httpStatus.NOT_FOUND);
-  if (slot.isBooked || slot.isCancelled) throw new AppError("Slot is not available", httpStatus.CONFLICT);
-  if (slot.doctorId !== doctorId)
-    throw new AppError("Slot does not belong to this doctor", httpStatus.BAD_REQUEST);
-
   const patient = await prisma.patient.findUnique({
     where: { userId },
   });
@@ -73,13 +68,6 @@ const createAppointment = async (
     },
   });
 
-  if (existingAppointment) {
-    throw new AppError(
-      "Patient already has an active appointment with this doctor on this date",
-      httpStatus.CONFLICT,
-    );
-  }
-
   // 3. Fetch patient & user for payment form
   const user = await prisma.user.findUnique({ where: { id: userId } });
   if (!user) throw new AppError("User not found", httpStatus.NOT_FOUND);
@@ -90,6 +78,68 @@ const createAppointment = async (
     select: { consultationFee: true, user: { select: { name: true, email: true } } },
   });
   if (!doctor) throw new AppError("Doctor not found", httpStatus.NOT_FOUND);
+
+  if (existingAppointment) {
+    const payment = await prisma.payment.findFirst({
+      where: {
+        appointmentId: existingAppointment.id,
+        paymentStatus: "PENDING",
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    if (payment) {
+      const tran_id = generateTransactionId(existingAppointment.publicId);
+      const sslPayload = {
+        total_amount: doctor.consultationFee,
+        currency: "BDT",
+        tran_id,
+        success_url: `${config.serverUrl}/api/v1/appointment/payment/success?tran_id=${tran_id}&appointmentId=${existingAppointment.publicId}`,
+        fail_url: `${config.serverUrl}/api/v1/appointment/payment/fail?tran_id=${tran_id}&appointmentId=${existingAppointment.publicId}`,
+        cancel_url: `${config.serverUrl}/api/v1/appointment/payment/cancel?tran_id=${tran_id}&appointmentId=${existingAppointment.publicId}`,
+        ipn_url: `${config.serverUrl}/api/v1/appointment/payment/ipn`,
+        cus_name: user.name,
+        cus_email: user.email,
+        cus_phone: user.phone || "01700000000",
+        product_name: "Doctor Appointment",
+        product_category: "Healthcare",
+        product_profile: "general",
+        shipping_method: "NO",
+        num_of_item: 1,
+      };
+
+      const sslResponse = await initiateSSLCommerzPayment({
+        ...sslPayload,
+        tran_id,
+      });
+
+      await prisma.payment.update({
+        where: { appointmentId: existingAppointment.id },
+        data: {
+          gateway: "SSLCOMMERZ",
+          transactionId: tran_id,
+          paymentStatus: "PENDING",
+        },
+      });
+
+      return {
+        appointment: existingAppointment,
+        paymentUrl: sslResponse.GatewayPageURL,
+        isExistingAppointment: true,
+      };
+    }
+
+    throw new AppError(
+      "Patient already has an active appointment with this doctor on this date",
+      httpStatus.CONFLICT,
+    );
+  }
+
+  if (!slot) throw new AppError("Slot not found", httpStatus.NOT_FOUND);
+  if (slot.isBooked || slot.isCancelled) throw new AppError("Slot is not available", httpStatus.CONFLICT);
+  if (slot.doctorId !== doctorId)
+    throw new AppError("Slot does not belong to this doctor", httpStatus.BAD_REQUEST);
 
   // 5. Create appointment + mark slot as booked (transaction)
 
@@ -226,20 +276,30 @@ const handlePaymentSuccess = async (tran_id: string, val_id: string, appointment
 
     // Create meeting link for online consultations
     if (appointment.consultationType === "ONLINE") {
-      const { meetLink, eventId } = await createGoogleMeet(
-        String(appointment?.doctorSlots?.startTime),
-        String(appointment?.doctorSlots?.endTime),
-        [{ email: "nazmul@gmail.com" }],
-      );
+      try {
+        console.log(appointment);
+        console.log(
+          String(appointment?.doctorSlots?.startTime.toISOString()),
+          String(appointment?.doctorSlots?.endTime.toISOString()),
+        );
+        const { meetLink, eventId } = await createGoogleMeet(
+          String(appointment?.doctorSlots?.startTime.toISOString()),
+          String(appointment?.doctorSlots?.endTime.toISOString()),
+          [{ email: "nazmul@gmail.com" }],
+        );
 
-      await tx.meeting.create({
-        data: {
-          appointmentId: appointment.id,
-          meetingLink: meetLink || "",
-          eventId: eventId,
-          meetingTime: appointment.appointmentDate,
-        },
-      });
+        await tx.meeting.create({
+          data: {
+            appointmentId: appointment.id,
+            meetingLink: meetLink || "",
+            eventId: eventId,
+            meetingTime: appointment.appointmentDate,
+          },
+        });
+      } catch (error: any) {
+        console.log(error.response.data.error);
+        throw new Error(error);
+      }
     }
   });
 
@@ -358,7 +418,6 @@ const handleIPN = async (ipnData: Record<string, string>) => {
 // RESCHEDULE APPOINTMENT
 // ─────────────────────────────────────────────────────────────────────────────
 const rescheduleAppointment = async (
-  userId: number,
   publicId: string,
   payload: { newSlotId: number; newAppointmentDate: string },
 ) => {
@@ -370,7 +429,7 @@ const rescheduleAppointment = async (
   });
 
   if (!appointment) throw new AppError("Appointment not found", httpStatus.NOT_FOUND);
-  if (appointment.userId !== userId) throw new AppError("Unauthorized", httpStatus.FORBIDDEN);
+
   if (!["BOOKED", "PENDING"].includes(appointment.appointmentStatus))
     throw new AppError("Only PENDING or BOOKED appointments can be rescheduled", httpStatus.BAD_REQUEST);
 
@@ -527,7 +586,7 @@ const cancelAppointment = async (publicId: string, userId: number) => {
 
   if (!appointment) throw new AppError("Appointment not found", httpStatus.NOT_FOUND);
   if (appointment.userId !== userId) throw new AppError("Unauthorized", httpStatus.FORBIDDEN);
-  if (!["PENDING", "BOOKED"].includes(appointment.appointmentStatus))
+  if (!["PENDING"].includes(appointment.appointmentStatus))
     throw new AppError("Appointment cannot be cancelled", httpStatus.BAD_REQUEST);
 
   await prisma.$transaction(async (tx) => {

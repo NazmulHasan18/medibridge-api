@@ -38,6 +38,14 @@ export async function createGoogleMeet(startDate: string, endDate: string, atten
     attendees,
   };
 
+  console.log(
+    JSON.stringify({
+      calendarId: "primary",
+      requestBody: event,
+      conferenceDataVersion: 1,
+    }),
+  );
+
   const res = await calendar.events.insert({
     calendarId: "primary",
     requestBody: event,

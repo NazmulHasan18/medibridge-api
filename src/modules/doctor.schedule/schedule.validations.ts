@@ -61,6 +61,8 @@ export const getSlotsByDoctorSchema = z.object({
     .enum(["true", "false"])
     .transform((v) => v === "true")
     .optional(),
+  page: z.number().min(1).default(1).optional(),
+  limit: z.number().min(1).default(10).optional(),
 });
 
 export const cancelSlotSchema = z.object({ slotId: z.string() });

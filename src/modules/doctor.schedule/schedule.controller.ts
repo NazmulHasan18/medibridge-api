@@ -109,18 +109,20 @@ const generateSlots = catchAsync(async (req: Request, res: Response) => {
 const getSlotsByDoctor = catchAsync(async (req: Request, res: Response) => {
   const { publicId } = req.params;
 
-  const query = req.query as { date?: string; available?: string };
+  const query = req.query as { date?: string; available?: string; page?: string; limit?: string };
 
-  const slots = await DoctorScheduleService.getSlotsByDoctor(publicId, {
+  const response = await DoctorScheduleService.getSlotsByDoctor(publicId, {
     date: query.date,
     available: query.available !== undefined ? query.available === "true" : undefined,
+    page: Number(query.page) || 1,
+    limit: Number(query.limit) || 10,
   });
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: "Slots fetched successfully",
-    data: slots,
+    data: response,
   });
 });
 
