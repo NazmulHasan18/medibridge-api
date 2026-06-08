@@ -134,13 +134,18 @@ const updateAppointmentStatus = catchAsync(async (req: Request, res: Response) =
 const getMyAppointments = catchAsync(async (req: Request, res: Response) => {
   const userId = req.user?.id;
 
+  const role = req.user?.role;
+
   if (!userId) {
     throw new AppError("UserId is required", httpStatus.BAD_REQUEST);
+  }
+  if (!role) {
+    throw new AppError("Role is required", httpStatus.BAD_REQUEST);
   }
 
   const { status, page, limit } = req.query;
 
-  const result = await appointmentService.getMyAppointments(userId, {
+  const result = await appointmentService.getMyAppointments(userId, role, {
     status: status as any,
     page: page ? Number(page) : 1,
     limit: limit ? Number(limit) : 10,
@@ -160,13 +165,17 @@ const getMyAppointments = catchAsync(async (req: Request, res: Response) => {
 // ─────────────────────────────────────────────────────────────────────────────
 const getAppointmentByPublicId = catchAsync(async (req: Request, res: Response) => {
   const userId = req.user?.id;
+  const role = req.user?.role;
 
   if (!userId) {
     throw new AppError("UserId is required", 400);
   }
+  if (!role) {
+    throw new AppError("Role is required", 400);
+  }
 
   const { publicId } = req.params;
-  const result = await appointmentService.getAppointmentByPublicId(publicId, userId);
+  const result = await appointmentService.getAppointmentByPublicId(publicId, userId, role);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

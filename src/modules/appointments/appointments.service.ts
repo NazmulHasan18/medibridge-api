@@ -430,8 +430,8 @@ const rescheduleAppointment = async (
 
   if (!appointment) throw new AppError("Appointment not found", httpStatus.NOT_FOUND);
 
-  if (!["BOOKED", "PENDING"].includes(appointment.appointmentStatus))
-    throw new AppError("Only PENDING or BOOKED appointments can be rescheduled", httpStatus.BAD_REQUEST);
+  if (!["CONFIRMED", "PENDING"].includes(appointment.appointmentStatus))
+    throw new AppError("Only PENDING or CONFIRMED appointments can be rescheduled", httpStatus.BAD_REQUEST);
 
   // Validate new slot
   const newSlot = await prisma.doctorSlot.findUnique({ where: { id: newSlotId } });
@@ -523,12 +523,21 @@ const updateAppointmentStatus = async (publicId: string, appointmentStatus: Appo
 // ─────────────────────────────────────────────────────────────────────────────
 const getMyAppointments = async (
   userId: number,
+  role: string,
   filters: { status?: AppointmentStatus; page?: number; limit?: number },
 ) => {
   const { status, page = 1, limit = 10 } = filters;
   const skip = (page - 1) * limit;
 
-  const where: Prisma.AppointmentWhereInput = { userId };
+  const where: Prisma.AppointmentWhereInput = {};
+  if (role === "DOCTOR") {
+    const doctor = await prisma.doctor.findUniqueOrThrow({ where: { userId: userId } });
+    where.doctorId = doctor?.id;
+  }
+  if (role === "PATIENT") {
+    where.userId = userId;
+  }
+
   if (status) where.appointmentStatus = status;
 
   const [appointments, total] = await Promise.all([
@@ -556,7 +565,7 @@ const getMyAppointments = async (
 // ─────────────────────────────────────────────────────────────────────────────
 // GET SINGLE APPOINTMENT
 // ─────────────────────────────────────────────────────────────────────────────
-const getAppointmentByPublicId = async (publicId: string, userId: number) => {
+const getAppointmentByPublicId = async (publicId: string, userId: number, role: string) => {
   const appointment = await prisma.appointment.findUnique({
     where: { publicId },
     include: {
@@ -570,7 +579,12 @@ const getAppointmentByPublicId = async (publicId: string, userId: number) => {
   });
 
   if (!appointment) throw new AppError("Appointment not found", httpStatus.NOT_FOUND);
-  if (appointment.userId !== userId) throw new AppError("Unauthorized", httpStatus.FORBIDDEN);
+  if (appointment.userId !== userId && role === "PATIENT")
+    throw new AppError("Unauthorized", httpStatus.FORBIDDEN);
+  if (role === "DOCTOR") {
+    const doctor = await prisma.doctor.findFirstOrThrow({ where: { userId } });
+    if (doctor.id !== appointment.doctorId) throw new AppError("Unauthorized", httpStatus.FORBIDDEN);
+  }
 
   return appointment;
 };

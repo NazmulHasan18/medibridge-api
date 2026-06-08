@@ -20,19 +20,15 @@ router.post(
 );
 
 // My appointments list
-router.get("/my-appointments", auth(UserRole.PATIENT), appointmentController.getMyAppointments);
+router.get("/appointments", auth(), appointmentController.getMyAppointments);
 
 // Single appointment
-router.get(
-  "/:publicId",
-  auth(UserRole.PATIENT, UserRole.DOCTOR, UserRole.ADMIN, UserRole.SUPER_ADMIN),
-  appointmentController.getAppointmentByPublicId,
-);
+router.get("/:publicId", auth(), appointmentController.getAppointmentByPublicId);
 
 // Reschedule
 router.patch(
   "/:publicId/reschedule",
-  auth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  auth(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.DOCTOR),
   validate(paymentValidationSchema.rescheduleAppointment),
   appointmentController.rescheduleAppointment,
 );
@@ -47,7 +43,7 @@ router.patch("/:publicId/cancel", auth(UserRole.PATIENT), appointmentController.
 // Update appointment status (BOOKED, COMPLETED, CANCELLED etc.)
 router.patch(
   "/:publicId/status",
-  auth(UserRole.ADMIN, UserRole.DOCTOR),
+  auth(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.DOCTOR),
   validate(paymentValidationSchema.updateAppointmentStatus),
   appointmentController.updateAppointmentStatus,
 );
