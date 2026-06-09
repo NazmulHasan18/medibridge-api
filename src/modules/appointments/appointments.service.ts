@@ -570,7 +570,7 @@ const getAppointmentByPublicId = async (publicId: string, userId: number, role: 
     where: { publicId },
     include: {
       doctor: { include: { user: { select: { name: true, email: true } } } },
-      patient: true,
+      patient: { include: { user: { select: { name: true, email: true } } } },
       payment: true,
       meeting: true,
       doctorSlots: true,

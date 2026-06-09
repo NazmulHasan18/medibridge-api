@@ -46,8 +46,6 @@ export const auth =
         throw new AppError("Your account has been suspended", 403);
       }
 
-      console.log(requiredRoles.length, requiredRoles.includes(user.role), user.role, requiredRoles);
-
       if (requiredRoles.length && !requiredRoles.includes(user.role)) {
         throw new AppError("You are not authorized to access this resource", 403);
       }

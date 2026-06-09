@@ -257,17 +257,32 @@ model Transaction {
 
 // ===========================Prescription Model===========================
 model Prescription {
-  id            Int         @id @default(autoincrement())
-  appointmentId Int         @unique
+  id            Int                    @id @default(autoincrement())
+  publicId      String                 @unique @default(cuid())
+  appointmentId Int                    @unique
   doctorId      Int
   patientId     Int
-  symptoms      String?
-  medicines     Json
-  advice        String?
-  appointment   Appointment @relation(fields: [appointmentId], references: [id])
-  doctor        Doctor      @relation(fields: [doctorId], references: [id])
-  patient       Patient     @relation(fields: [patientId], references: [id])
-  createdAt     DateTime    @default(now())
+  diagnosis     String?                @db.Text
+  advice        String?                @db.Text
+  followUpDate  DateTime?
+  content       Json?
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
+  appointment   Appointment            @relation(fields: [appointmentId], references: [id])
+  doctor        Doctor                 @relation(fields: [doctorId], references: [id])
+  patient       Patient                @relation(fields: [patientId], references: [id])
+  medicines     PrescriptionMedicine[]
+}
+
+model PrescriptionMedicine {
+  id             Int          @id @default(autoincrement())
+  prescriptionId Int
+  medicineName   String
+  dosage         String
+  frequency      String
+  duration       String
+  instruction    String?
+  prescription   Prescription @relation(fields: [prescriptionId], references: [id])
 }
 
 // ===========================Blog Model===========================
