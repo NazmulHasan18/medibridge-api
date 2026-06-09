@@ -255,6 +255,11 @@ const getPatientPrescriptions = async (patientId: number, page = 1, limit = 10) 
             user: { select: { id: true, publicId: true, name: true, email: true, profileImage: true } },
           },
         },
+        patient: {
+          include: {
+            user: { select: { id: true, publicId: true, name: true, email: true, profileImage: true } },
+          },
+        },
         appointment: true,
       },
     }),
@@ -282,6 +287,11 @@ const getDoctorPrescriptions = async (doctorId: number, page = 1, limit = 10) =>
       include: {
         medicines: true,
         patient: {
+          include: {
+            user: { select: { id: true, publicId: true, name: true, email: true, profileImage: true } },
+          },
+        },
+        doctor: {
           include: {
             user: { select: { id: true, publicId: true, name: true, email: true, profileImage: true } },
           },

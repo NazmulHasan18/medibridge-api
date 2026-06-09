@@ -14,6 +14,9 @@ async function getDoctorOrPatientId(req: Request): Promise<number> {
   if (req.user?.role === "DOCTOR") {
     const doctor = await prisma.doctor.findUniqueOrThrow({ where: { userId: req.user?.id } });
     return doctor.id;
+  } else if (req.user?.role === "PATIENT") {
+    const patient = await prisma.patient.findUniqueOrThrow({ where: { userId: req.user?.id } });
+    return patient.id;
   } else {
     return Number(req.user?.id);
   }
@@ -91,7 +94,7 @@ const getMyPrescriptions = catchAsync(async (req: Request, res: Response) => {
   const limit = Number(req.query.limit) || 10;
 
   let result;
-  if (role === "patient") {
+  if (role === "PATIENT") {
     result = await PrescriptionService.getPatientPrescriptions(id, page, limit);
   } else {
     result = await PrescriptionService.getDoctorPrescriptions(id, page, limit);
