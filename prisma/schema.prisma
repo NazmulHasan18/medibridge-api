@@ -101,6 +101,7 @@ model User {
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
   deletedAt       DateTime?
+  comments        Comment[]
 }
 
 // =========================Wallet Model===========================
@@ -287,17 +288,33 @@ model PrescriptionMedicine {
 
 // ===========================Blog Model===========================
 model Blog {
+  id         Int       @id @default(autoincrement())
+  publicId   String    @unique @default(cuid())
+  doctorId   Int
+  doctorName String
+  title      String
+  slug       String    @unique
+  content    String
+  thumbnail  String?
+  doctor     Doctor    @relation(fields: [doctorId], references: [id])
+  comments   Comment[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+model Comment {
   id        Int      @id @default(autoincrement())
   publicId  String   @unique @default(cuid())
-  doctorId  Int
-  title     String
-  slug      String   @unique
+  blogId    Int
+  userId    Int
   content   String
-  thumbnail String?
-  doctor    Doctor   @relation(fields: [doctorId], references: [id])
+  blog      Blog     @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// Add to Blog model:
 
 // ===========================Meeting Model===========================
 model Meeting {
