@@ -12,6 +12,7 @@ import { appointmentRoutes } from "./modules/appointments/appointments.route.js"
 import { sendEmail } from "./helpers/sendEmail.js";
 import prescriptionRoutes from "./modules/prescriptions/prescripitons.routes.js";
 import { blogRoutes } from "./modules/blogs/blogs.route.js";
+import { patientRoute } from "./modules/patients/patient.route.js";
 const app = express();
 
 // Middleware
@@ -28,6 +29,7 @@ app.use(cookieParser());
 
 app.use(morgan("tiny"));
 
+app.use("/api/v1/patients", patientRoute);
 app.use("/api/v1/blogs", blogRoutes);
 app.use("/api/v1/prescriptions", prescriptionRoutes);
 app.use("/api/v1/appointment", appointmentRoutes);
