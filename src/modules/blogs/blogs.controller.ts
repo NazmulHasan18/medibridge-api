@@ -7,16 +7,18 @@ import sendResponse from "../../utils/sendResponse.js";
 
 const createBlog = catchAsync(async (req: Request, res: Response) => {
   // req.user is set by your auth middleware
-  const doctorId = req.user?.id;
+  const userId = req.user?.id;
+
   const doctorName = req.user?.name;
 
-  if (!doctorId) {
-    throw new AppError("Doctor id is required", httpStatus.BAD_REQUEST);
+  if (!userId) {
+    throw new AppError("User id is required", httpStatus.BAD_REQUEST);
   }
   if (!doctorName) {
-    throw new AppError("Doctor Name is required", httpStatus.BAD_REQUEST);
+    throw new AppError("Doctor name is required", httpStatus.BAD_REQUEST);
   }
-  const result = await blogService.createBlog(doctorId, doctorName, req.body);
+
+  const result = await blogService.createBlog(userId, doctorName, req.body);
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,

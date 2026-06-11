@@ -7,7 +7,7 @@ import { Prisma } from "@prisma/client";
 // ─── Blog Services ────────────────────────────────────────────────
 
 const createBlog = async (
-  doctorId: number,
+  userId: number,
   doctorName: string,
   payload: {
     title: string;
@@ -15,6 +15,9 @@ const createBlog = async (
     thumbnail?: string;
   },
 ) => {
+  const doctor = await prisma.doctor.findUniqueOrThrow({ where: { userId } });
+  const doctorId = doctor.id;
+
   const slug = slugify(payload.title, { lower: true, strict: true });
 
   // Ensure slug uniqueness
@@ -57,6 +60,7 @@ const getAllBlogs = async (query: { page?: number; limit?: number; search?: stri
       orderBy: { createdAt: "desc" },
       include: {
         _count: { select: { comments: true } },
+        doctor: { select: { specialization: true } },
       },
     }),
     prisma.blog.count({ where }),
@@ -127,7 +131,7 @@ const getBlogByPublicId = async (publicId: string) => {
 
 const updateBlog = async (
   publicId: string,
-  doctorId: number,
+  userId: number,
   payload: Partial<{ title: string; content: string; thumbnail: string }>,
 ) => {
   const blog = await prisma.blog.findUnique({ where: { publicId } });
@@ -136,6 +140,9 @@ const updateBlog = async (
     throw new AppError("Blog not found", httpStatus.NOT_FOUND);
   }
 
+  const doctor = await prisma.doctor.findUniqueOrThrow({ where: { userId } });
+
+  const doctorId = doctor.id;
   // Only the owning doctor can update
   if (blog.doctorId !== doctorId) {
     throw new AppError("You are not authorized to update this blog", httpStatus.FORBIDDEN);
