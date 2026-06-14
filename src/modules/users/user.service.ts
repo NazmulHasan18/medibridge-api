@@ -2,7 +2,9 @@ import bcrypt from "bcryptjs";
 import { prisma } from "../../lib/prisma.js";
 import type { CreateUserPayload } from "./user.validations.js";
 import { nanoid } from "nanoid";
-import { Prisma } from "@prisma/client";
+import { Prisma, UserRole } from "@prisma/client";
+import AppError from "../../errors/AppError.js";
+import httpStatus from "http-status";
 
 const generateReferralCode = () => {
   return nanoid(8).toUpperCase();
@@ -70,6 +72,57 @@ const createUser = async (data: CreateUserPayload) => {
   });
 };
 
+const fetchAllUserByRole = async (role: UserRole, page = 1, limit = 10) => {
+  const [total, users] = await Promise.all([
+    prisma.user.count({ where: { role } }),
+    prisma.user.findMany({
+      where: { role },
+      skip: (page - 1) * limit,
+      include: { patient: true, doctor: true },
+      omit: { password: true },
+    }),
+  ]);
+
+  return {
+    meta: { page, limit, total, totalPages: Math.ceil(total / limit) },
+    data: users,
+  };
+};
+
+const deleteUser = async (userId: number) => {
+  const user = await prisma.user.findUniqueOrThrow({ where: { id: userId } });
+
+  const role = user.role;
+  if (role === "SUPER_ADMIN") {
+    throw new AppError("Super admin can't be deleted", httpStatus.BAD_REQUEST);
+  }
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      deletedAt: new Date(),
+      status: "BLOCKED",
+    },
+  });
+  if (role === "DOCTOR") {
+    await prisma.doctor.update({
+      where: { userId },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+  } else if (role === "PATIENT") {
+    await prisma.patient.update({
+      where: { userId },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+  }
+  return { message: "User deleted successfully" };
+};
+
 export const UserService = {
   createUser,
+  fetchAllUserByRole,
+  deleteUser,
 };

@@ -10,9 +10,12 @@ import { doctorRoute } from "./modules/doctor/doctor.route.js";
 import { scheduleRoute } from "./modules/doctor.schedule/schedule.route.js";
 import { appointmentRoutes } from "./modules/appointments/appointments.route.js";
 import { sendEmail } from "./helpers/sendEmail.js";
-import prescriptionRoutes from "./modules/prescriptions/prescripitons.routes.js";
 import { blogRoutes } from "./modules/blogs/blogs.route.js";
 import { patientRoute } from "./modules/patients/patient.route.js";
+import { paymentRoute } from "./modules/payments/payment.route.js";
+import { paymentDashboardRoute } from "./modules/dashboard/patientDashboard.route.js";
+import prescriptionRoutes from "./modules/prescriptions/prescriptions.routes.js";
+import { transactionRoute } from "./modules/transactions/transaction.route.js";
 const app = express();
 
 // Middleware
@@ -29,6 +32,9 @@ app.use(cookieParser());
 
 app.use(morgan("tiny"));
 
+app.use("/api/v1/transactions", transactionRoute);
+app.use("/api/v1/dashboard/patient", paymentDashboardRoute);
+app.use("/api/v1/payments", paymentRoute);
 app.use("/api/v1/patients", patientRoute);
 app.use("/api/v1/blogs", blogRoutes);
 app.use("/api/v1/prescriptions", prescriptionRoutes);
