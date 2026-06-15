@@ -66,3 +66,22 @@ export const createUserSchema = z
   });
 
 export type CreateUserPayload = z.infer<typeof createUserSchema>;
+
+export const updateUserSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters").optional(),
+  email: z.string().email("Invalid email address").optional(),
+  phone: z
+    .string()
+    .regex(/^[0-9]{10,15}$/, "Phone must be 10 to 15 digits")
+    .optional(),
+  address: z.string().min(5, "Address must be at least 5 characters").optional(),
+  password: z.string().optional(),
+  profileImage: z.string().optional(),
+});
+export const updateDoctorSchema = z.object({
+  specialization: z.string().min(2, "Specialization is required"),
+  qualification: z.string().min(2, "Qualification is required"),
+  experience: z.coerce.number().min(0, "Experience must be 0 or more"),
+  consultationFee: z.coerce.number().min(0, "Consultation fee must be 0 or more"),
+  bio: z.string().optional(),
+});
