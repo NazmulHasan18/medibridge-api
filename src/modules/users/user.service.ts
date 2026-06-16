@@ -6,6 +6,7 @@ import { Prisma, UserRole, UserStatus } from "@prisma/client";
 import { prisma } from "../../lib/prisma.js";
 import AppError from "../../errors/AppError.js";
 import type { CreateUserPayload } from "./user.validations.js";
+import { GetUsersParams } from "./user.types.js";
 
 const generateReferralCode = () => nanoid(8).toUpperCase();
 
@@ -60,16 +61,6 @@ const createUser = async (data: CreateUserPayload) => {
     },
   });
 };
-
-interface GetUsersParams {
-  page?: number;
-  limit?: number;
-  role?: UserRole;
-  status?: UserStatus;
-  search?: string;
-  sortBy?: string;
-  sortOrder?: "asc" | "desc";
-}
 
 const getUsers = async ({
   page = 1,
