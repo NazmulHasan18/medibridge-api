@@ -13,7 +13,7 @@ import { sendEmail } from "./helpers/sendEmail.js";
 import { blogRoutes } from "./modules/blogs/blogs.route.js";
 import { patientRoute } from "./modules/patients/patient.route.js";
 import { paymentRoute } from "./modules/payments/payment.route.js";
-import { paymentDashboardRoute } from "./modules/dashboard/patientDashboard.route.js";
+import { dashboardRoute } from "./modules/dashboard/dashboard.route.js";
 import prescriptionRoutes from "./modules/prescriptions/prescriptions.routes.js";
 import { transactionRoute } from "./modules/transactions/transaction.route.js";
 const app = express();
@@ -33,7 +33,7 @@ app.use(cookieParser());
 app.use(morgan("tiny"));
 
 app.use("/api/v1/transactions", transactionRoute);
-app.use("/api/v1/dashboard/patient", paymentDashboardRoute);
+app.use("/api/v1/dashboard", dashboardRoute);
 app.use("/api/v1/payments", paymentRoute);
 app.use("/api/v1/patients", patientRoute);
 app.use("/api/v1/blogs", blogRoutes);
