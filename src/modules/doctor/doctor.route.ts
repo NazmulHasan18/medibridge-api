@@ -7,6 +7,8 @@ import { updateDoctorSchema } from "./doctor.validations.js";
 const router = Router();
 
 router.get("/", DoctorController.getAllDoctor);
+router.get("/available", DoctorController.getAvailableDoctors);
+router.get("/specializations", DoctorController.getAllSpecializations);
 router.get("/fetch", auth("ADMIN", "SUPER_ADMIN"), DoctorController.fetchAllDoctor);
 router.get("/:id", auth(), DoctorController.getDoctorById);
 router.patch(

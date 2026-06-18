@@ -203,10 +203,161 @@ const updateDoctor = async (publicId: string, data: Partial<Prisma.DoctorUpdateI
   return updatedDoctor;
 };
 
+const getAllAvailableDoctor = async ({
+  specialization,
+  appointmentDate,
+}: {
+  specialization: string;
+  appointmentDate: string;
+}) => {
+  const requestedDate = new Date(appointmentDate);
+
+  const startOfDay = new Date(requestedDate);
+  startOfDay.setHours(0, 0, 0, 0);
+
+  const endOfDay = new Date(requestedDate);
+  endOfDay.setHours(23, 59, 59, 999);
+
+  // ==========================================================
+  // Step 1: Check requested date
+  // ==========================================================
+
+  const doctors = await prisma.doctor.findMany({
+    where: {
+      specialization,
+
+      doctorSlots: {
+        some: {
+          startTime: {
+            gte: startOfDay,
+            lte: endOfDay,
+          },
+          isBooked: false,
+          isCancelled: false,
+        },
+      },
+    },
+
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+          address: true,
+          profileImage: true,
+          publicId: true,
+        },
+      },
+    },
+  });
+
+  if (doctors.length) {
+    return {
+      available: true,
+      requestedDate,
+      availableDate: requestedDate,
+      doctors,
+    };
+  }
+
+  // ==========================================================
+  // Step 2: Find nearest available slot after requested date
+  // ==========================================================
+
+  const nextSlot = await prisma.doctorSlot.findFirst({
+    where: {
+      isBooked: false,
+      isCancelled: false,
+
+      startTime: {
+        gt: endOfDay,
+      },
+
+      doctor: {
+        specialization,
+      },
+    },
+
+    orderBy: {
+      startTime: "asc",
+    },
+  });
+
+  if (!nextSlot) {
+    return {
+      available: false,
+      requestedDate,
+      availableDate: null,
+      doctors: [],
+      message: "No available doctors were found for the selected specialization.",
+    };
+  }
+
+  const nextStart = new Date(nextSlot.startTime);
+  nextStart.setHours(0, 0, 0, 0);
+
+  const nextEnd = new Date(nextSlot.startTime);
+  nextEnd.setHours(23, 59, 59, 999);
+
+  const nextAvailableDoctors = await prisma.doctor.findMany({
+    where: {
+      specialization,
+
+      doctorSlots: {
+        some: {
+          startTime: {
+            gte: nextStart,
+            lte: nextEnd,
+          },
+          isBooked: false,
+          isCancelled: false,
+        },
+      },
+    },
+
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+          address: true,
+          profileImage: true,
+          publicId: true,
+        },
+      },
+    },
+  });
+
+  return {
+    available: false,
+    requestedDate,
+    availableDate: nextStart,
+    doctors: nextAvailableDoctors,
+    message: "No doctors are available on the selected date. Showing the nearest available date.",
+  };
+};
+
+const getAllSpecialization = async () => {
+  const doctors = await prisma.doctor.findMany({
+    select: { specialization: true },
+    distinct: ["specialization"],
+    orderBy: { specialization: "asc" },
+  });
+
+  const specializations = doctors.map((doc) => doc.specialization);
+  return specializations;
+};
+
 export const DoctorService = {
   getAllDoctor,
   fetchAllDoctor,
   getDoctorById,
   deleteDoctor,
   updateDoctor,
+  getAllAvailableDoctor,
+  getAllSpecialization,
 };
