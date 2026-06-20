@@ -44,11 +44,8 @@ async function resolveDoctorByPublicId(publicId: string) {
   if (!publicId) {
     throw new AppError("Public id required", 404);
   }
-  const user = await prisma.user.findUnique({
-    where: { publicId, deletedAt: null },
-    include: { doctor: true },
-  });
-  const doctor = user?.doctor;
+
+  const doctor = await prisma.doctor.findUnique({ where: { publicId } });
 
   if (!doctor) throw new AppError("Doctor not found", 404);
   return doctor;

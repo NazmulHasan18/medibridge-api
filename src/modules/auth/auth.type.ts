@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { User, UserRole, UserStatus } from "@prisma/client";
 
 export interface JwtPayload {
   id: number;
@@ -6,8 +6,8 @@ export interface JwtPayload {
   name: string;
   publicId: string;
   regType: string;
-  role: string;
-  status: string;
+  role: UserRole;
+  status: UserStatus;
   profileImage: string | null;
 }
 
