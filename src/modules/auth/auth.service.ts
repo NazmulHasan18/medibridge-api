@@ -19,7 +19,10 @@ const excludePassword = (user: User): SafeUser => {
 
 // ─── Login ──────────────────────────────────────────────────
 const login = async (payload: { email: string; password: string }) => {
-  const user = await prisma.user.findUnique({ where: { email: payload.email } });
+  const user = await prisma.user.findUnique({
+    where: { email: payload.email },
+    include: { doctor: true, patient: true },
+  });
 
   if (!user) throw new AppError("No account found with this email", 404);
 
