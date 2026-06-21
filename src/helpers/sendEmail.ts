@@ -13,6 +13,7 @@ type TemplateName =
   | "appointmentPaymentFailed"
   | "appointmentRescheduled"
   | "appointmentRescheduledDoctor"
+  | "appointmentReminder"
   | "appointmentCancelled";
 
 // ─── Per-template data shapes ─────────────────────────────────────────────────
@@ -41,6 +42,15 @@ interface TemplateDataMap {
   };
   appointmentCancelled: {
     patientName: string;
+  };
+  appointmentReminder: {
+    patientName: string;
+    doctorName: string;
+    specialization: string;
+    appointmentDate: string;
+    appointmentTime: string;
+    location: string;
+    bookingId: string;
   };
 }
 

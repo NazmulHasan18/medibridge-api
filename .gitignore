@@ -5,5 +5,6 @@ build
 .log
 .logger
 /generated/prisma
-
+./logs
+logs
 .vercel

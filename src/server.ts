@@ -2,6 +2,7 @@ import http, { Server } from "http";
 import app from "./app.js";
 import dotenv from "dotenv";
 import { seedSuperAdmin } from "./utils/seed.js";
+import { startJobs, stopJobs } from "./jobs/scheduler.js";
 
 dotenv.config();
 
@@ -11,6 +12,7 @@ async function startServer() {
   try {
     server = http.createServer(app);
     await seedSuperAdmin();
+    startJobs();
     server.listen(process.env.PORT, () => {
       console.log(`🚀 Server is running on port ${process.env.PORT}`);
     });
@@ -28,7 +30,7 @@ async function startServer() {
  */
 async function gracefulShutdown(signal: string) {
   console.warn(`🔄 Received ${signal}, shutting down gracefully...`);
-
+  stopJobs();
   if (server) {
     server.close(async () => {
       console.log("✅ HTTP server closed.");

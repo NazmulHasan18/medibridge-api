@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import AppError from "./AppError.js";
 import { Prisma } from "@prisma/client";
+
+import AppError from "./AppError.js";
+import logger from "../lib/logger.js";
 
 const handlePrismaError = (err: Prisma.PrismaClientKnownRequestError): AppError => {
   switch (err.code) {
@@ -13,35 +15,43 @@ const handlePrismaError = (err: Prisma.PrismaClientKnownRequestError): AppError 
 
       return new AppError(`${formatted} already exists`, 409);
     }
+
     case "P2025":
       return new AppError((err.meta?.cause as string) || "Record not found", 404);
+
     case "P2003":
       return new AppError("Foreign key constraint failed", 400);
+
     case "P2014":
       return new AppError("Invalid relation", 400);
+
     case "P2000":
       return new AppError("Input value too long", 400);
+
     default:
       return new AppError("Database error", 500);
   }
 };
 
-const globalErrorHandler = (err: Error, _req: Request, res: Response, _next: NextFunction): void => {
-  console.log(err);
-
+const globalErrorHandler = (err: Error, req: Request, res: Response, _next: NextFunction): void => {
   let error = err as AppError;
 
-  // Handle Prisma known request errors
+  logger.error({
+    message: err.message,
+    stack: err.stack,
+    method: req.method,
+    url: req.originalUrl,
+    ip: req.ip,
+  });
+
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
     error = handlePrismaError(err);
   }
 
-  // Handle Prisma validation errors
   if (err instanceof Prisma.PrismaClientValidationError) {
     error = new AppError("Invalid data provided", 400);
   }
 
-  // Handle Prisma initialization errors
   if (err instanceof Prisma.PrismaClientInitializationError) {
     error = new AppError("Database connection failed", 503);
   }
@@ -59,7 +69,6 @@ const globalErrorHandler = (err: Error, _req: Request, res: Response, _next: Nex
     return;
   }
 
-  // Production
   if (error.isOperational) {
     res.status(statusCode).json({
       success: false,
@@ -69,7 +78,15 @@ const globalErrorHandler = (err: Error, _req: Request, res: Response, _next: Nex
     return;
   }
 
-  console.error("UNEXPECTED ERROR:", err);
+  // Unexpected errors
+  logger.error({
+    message: "Unexpected error",
+    error: err,
+    stack: err.stack,
+    method: req.method,
+    url: req.originalUrl,
+  });
+
   res.status(500).json({
     success: false,
     status: "error",

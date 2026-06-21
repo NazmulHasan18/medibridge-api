@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Appointment Reminder – MediBridge</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: #f0f4f8;
+        font-family: "DM Sans", sans-serif;
+        color: #1a2332;
+        padding: 40px 16px;
+      }
+
+      .wrapper {
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #0a6e6e 0%, #0d9488 100%);
+        border-radius: 16px 16px 0 0;
+        padding: 36px 40px 28px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .header::before {
+        content: "";
+        position: absolute;
+        top: -40px;
+        right: -40px;
+        width: 160px;
+        height: 160px;
+        background: rgba(255, 255, 255, 0.06);
+        border-radius: 50%;
+      }
+      .logo {
+        font-family: "DM Serif Display", serif;
+        font-size: 26px;
+        color: #ffffff;
+        margin-bottom: 20px;
+        display: inline-block;
+      }
+      .logo span {
+        color: #99f6e4;
+      }
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 100px;
+        padding: 6px 18px;
+        color: #ffffff;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+      }
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        background: #6ee7b7;
+        border-radius: 50%;
+      }
+
+      .card {
+        background: #ffffff;
+        padding: 40px;
+        border-radius: 0 0 16px 16px;
+        box-shadow: 0 4px 24px rgba(13, 148, 136, 0.1);
+      }
+
+      .icon-wrapper {
+        text-align: center;
+        margin-bottom: 24px;
+      }
+      .icon-circle {
+        width: 72px;
+        height: 72px;
+        background: #f0fdfa;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+      }
+
+      .greeting {
+        font-family: "DM Serif Display", serif;
+        font-size: 28px;
+        color: #0f766e;
+        margin-bottom: 12px;
+        text-align: center;
+      }
+      .subtitle {
+        color: #64748b;
+        font-size: 15px;
+        line-height: 1.6;
+        margin-bottom: 32px;
+        text-align: center;
+      }
+
+      /* Details block */
+      .details-block {
+        background: #f0fdfa;
+        border: 1px solid #99f6e4;
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 28px;
+      }
+      .block-title {
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #0f766e;
+        margin-bottom: 16px;
+      }
+      .details-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .details-table td {
+        padding: 8px 0;
+        font-size: 14px;
+        vertical-align: top;
+      }
+      .details-table tr + tr td {
+        border-top: 1px solid #ccfbf1;
+      }
+      .details-table .label {
+        color: #64748b;
+        font-size: 13px;
+        width: 40%;
+      }
+      .details-table .value {
+        color: #134e4a;
+        font-weight: 500;
+      }
+      .details-table .value.strong {
+        font-weight: 600;
+      }
+      .details-table .value.booking-id {
+        font-size: 13px;
+        color: #0f766e;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+      }
+
+      /* Meet badge */
+      .meet-block {
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin-bottom: 28px;
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      .meet-icon {
+        font-size: 24px;
+        flex-shrink: 0;
+      }
+      .meet-label {
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #1d4ed8;
+        margin-bottom: 4px;
+      }
+      .meet-text {
+        font-size: 13px;
+        color: #1e40af;
+        line-height: 1.5;
+      }
+
+      /* CTA */
+      .cta-wrapper {
+        text-align: center;
+        margin: 32px 0 28px;
+      }
+      .cta-btn {
+        display: inline-block;
+        background: linear-gradient(135deg, #0a6e6e, #0d9488);
+        color: #ffffff;
+        text-decoration: none;
+        padding: 14px 36px;
+        border-radius: 100px;
+        font-size: 15px;
+        font-weight: 600;
+        box-shadow: 0 4px 16px rgba(13, 148, 136, 0.3);
+        margin-bottom: 12px;
+      }
+      .cta-links {
+        display: flex;
+        justify-content: center;
+        gap: 24px;
+        margin-top: 12px;
+      }
+      .cta-links a {
+        font-size: 13px;
+        text-decoration: underline;
+      }
+      .cta-links a.reschedule {
+        color: #6b7280;
+      }
+      .cta-links a.cancel {
+        color: #ef4444;
+      }
+
+      .divider {
+        border: none;
+        border-top: 1px solid #e2e8f0;
+        margin: 28px 0;
+      }
+
+      /* Checklist */
+      .checklist-title {
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #64748b;
+        margin-bottom: 12px;
+      }
+      .checklist {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .checklist-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        font-size: 13px;
+        color: #475569;
+        line-height: 1.5;
+      }
+      .check-mark {
+        color: #0d9488;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+
+      .footer {
+        text-align: center;
+        padding: 28px 16px 0;
+        color: #94a3b8;
+        font-size: 12px;
+        line-height: 1.8;
+      }
+      .footer a {
+        color: #6b7280;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="header">
+        <div class="logo">Medi<span>Bridge</span></div>
+        <br />
+        <div class="status-badge">
+          <div class="status-dot"></div>
+          Appointment Reminder
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="icon-wrapper">
+          <div class="icon-circle">🔔</div>
+        </div>
+
+        <div class="greeting">Your Appointment is Tomorrow</div>
+        <p class="subtitle">
+          Hi <strong>{{patientName}}</strong>, this is a friendly reminder about your upcoming appointment.
+          Please review the details below and make sure to arrive on time.
+        </p>
+
+        <div class="details-block">
+          <div class="block-title">📋 Appointment Details</div>
+          <table class="details-table">
+            <tr>
+              <td class="label">👨‍⚕️ Doctor</td>
+              <td class="value strong">Dr. {{doctorName}}</td>
+            </tr>
+            <tr>
+              <td class="label">🏥 Specialization</td>
+              <td class="value">{{specialization}}</td>
+            </tr>
+            <tr>
+              <td class="label">📅 Date</td>
+              <td class="value">{{appointmentDate}}</td>
+            </tr>
+            <tr>
+              <td class="label">⏰ Time</td>
+              <td class="value strong">{{appointmentTime}}</td>
+            </tr>
+            <tr>
+              <td class="label">📍 Location</td>
+              <td class="value">{{location}}</td>
+            </tr>
+            <tr>
+              <td class="label">🔖 Booking ID</td>
+              <td class="value booking-id">#{{bookingId}}</td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- Remove this block for IN_PERSON appointments -->
+        <div class="meet-block">
+          <div class="meet-icon">🎥</div>
+          <div>
+            <div class="meet-label">Online Consultation</div>
+            <div class="meet-text">
+              This is a virtual appointment. Your Google Meet link will be sent 15 minutes before your
+              session.
+            </div>
+          </div>
+        </div>
+
+        <div class="cta-wrapper">
+          <a href="#" class="cta-btn">View Appointment Details</a>
+          <div class="cta-links">
+            <a href="#" class="reschedule">Reschedule</a>
+            <a href="#" class="cancel">Cancel Appointment</a>
+          </div>
+        </div>
+
+        <hr class="divider" />
+
+        <div class="checklist-title">🗂 Before Your Appointment</div>
+        <div class="checklist">
+          <div class="checklist-item">
+            <span class="check-mark">✓</span>
+            Bring a valid photo ID and your insurance card
+          </div>
+          <div class="checklist-item">
+            <span class="check-mark">✓</span>
+            Carry a list of any current medications
+          </div>
+          <div class="checklist-item">
+            <span class="check-mark">✓</span>
+            Arrive 10–15 minutes before your scheduled time
+          </div>
+          <div class="checklist-item">
+            <span class="check-mark">✓</span>
+            Note any symptoms or concerns to discuss with the doctor
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <p>© 2025 MediBridge. All rights reserved.</p>
+        <p><a href="#">Find a Doctor</a> · <a href="#">Help Center</a> · <a href="#">Unsubscribe</a></p>
+      </div>
+    </div>
+  </body>
+</html>
