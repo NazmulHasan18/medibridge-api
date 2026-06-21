@@ -92,7 +92,8 @@ export async function sendEmail<T extends TemplateName>(options: SendEmailOption
   const { data: resendData, error } = await resend.emails.send({
     // from: config.mailFrom ?? "onboarding@resend.dev",
     from: "onboarding@resend.dev",
-    to: Array.isArray(to) ? to : [to],
+    //  Array.isArray(to) ? to : [to]
+    to: "nazmul182218@gmail.com",
     subject,
     html,
   });

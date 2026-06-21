@@ -293,7 +293,7 @@ const handlePaymentSuccess = async (tran_id: string, val_id: string, appointment
             appointmentId: appointment.id,
             meetingLink: meetLink || "",
             eventId: eventId,
-            meetingTime: appointment.appointmentDate,
+            meetingTime: new Date(appointment.doctorSlots?.startTime as Date),
           },
         });
       } catch (error: any) {
@@ -443,11 +443,12 @@ const rescheduleAppointment = async (
 
   await prisma.$transaction(async (tx) => {
     // Release old slots
-
-    await tx.doctorSlot.update({
-      where: { id: appointment?.doctorSlots?.id },
-      data: { isBooked: false, appointmentId: null },
-    });
+    if (appointment?.doctorSlots?.id) {
+      await tx.doctorSlot.update({
+        where: { id: appointment?.doctorSlots?.id },
+        data: { isBooked: false, appointmentId: null },
+      });
+    }
 
     // Book new slot
     await tx.doctorSlot.update({
@@ -471,7 +472,7 @@ const rescheduleAppointment = async (
     // Update meeting time if exists
     await tx.meeting.updateMany({
       where: { appointmentId: appointment.id },
-      data: { meetingTime: new Date(newAppointmentDate) },
+      data: { meetingTime: new Date(newSlot.startTime) },
     });
   });
 

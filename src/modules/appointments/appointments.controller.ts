@@ -43,7 +43,7 @@ const paymentSuccess = catchAsync(async (req: Request, res: Response) => {
   await appointmentService.handlePaymentSuccess(tran_id, val_id || "", appointmentId);
 
   // Redirect to frontend success page
-  res.redirect(`${config.clientUrl}/appointments/${appointmentId}/success`);
+  res.redirect(`${config.clientUrl}/patient/appointments/${appointmentId}`);
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -61,7 +61,7 @@ const paymentFail = catchAsync(async (req: Request, res: Response) => {
 
   await appointmentService.handlePaymentFail(tran_id, appointmentId);
 
-  res.redirect(`${config.clientUrl}/appointments/${appointmentId}/failed`);
+  res.redirect(`${config.clientUrl}/patient/appointments/${appointmentId}`);
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -80,7 +80,7 @@ const paymentCancel = catchAsync(async (req: Request, res: Response) => {
   // Treat cancel same as fail — release slot
   await appointmentService.handlePaymentFail(tran_id, appointmentId);
 
-  res.redirect(`${config.clientUrl}/appointments/${appointmentId}/cancelled`);
+  res.redirect(`${config.clientUrl}/patient/appointments/${appointmentId}`);
 });
 
 // ─────────────────────────────────────────────────────────────────────────────

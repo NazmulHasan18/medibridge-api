@@ -46,12 +46,11 @@ app.use("/api/v1/auth", AuthRoute);
 
 app.get("/test", async (req, res) => {
   const response = await sendEmail({
-    to: "nazmul182218@gmail.com",
+    to: ["nazmulhasanshanto13@gmail.com"],
     subject: "New Appointment Booked",
-    template: "newAppointmentDoctor",
+    template: "appointmentCancelled",
     data: {
       patientName: "patientName",
-      appointmentDate: String(new Date()),
     },
   });
   res.json({ response });
