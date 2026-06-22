@@ -1,96 +1,143 @@
-# Next Blog Starter
+# MediBridge Backend
 
-A simple **Blog Application Starter Pack** built with **TypeScript, Express.js**.  
-This project is designed for the **Next Level Web Development Bootcamp** to help learners practice Prisma hands-on by building a blog platform.
-
----
-
-## Features
-
-- TypeScript + Express.js setup
-- Modular project structure
-- Environment configuration with `dotenv`
-- Ready to extend with blog modules (Posts, Users, etc.)
+A scalable REST API for a healthcare appointment system built with **Node.js**, **Express**, and **Prisma ORM**.
 
 ---
 
-## Installation
+## 🚀 Tech Stack
 
-Clone the repository:
+- Node.js
+- Express.js
+- TypeScript
+- Prisma ORM
+- PostgreSQL
+- JWT Authentication
+- Bcrypt
+- Zod validation
+
+---
+
+## 📦 Features
+
+- User authentication (Patient / Doctor / Admin)
+- Role-based access control
+- Doctor management
+- Appointment booking system
+- Schedule management
+- Secure REST APIs
+- Input validation with Zod
+
+---
+
+## 🛠️ Installation
 
 ```bash
-git clone https://github.com/Apollo-Level2-Web-Dev/next-blog-starter.git
-cd next-blog-starter
-```
-
-Install dependencies:
-
-```bash
-# using npm
+git clone <backend-repo-url>
+cd backend
 npm install
-
-# using yarn
-yarn install
-
-# using pnpm
-pnpm install
 ```
 
-Setup environment variables:
+---
 
-```bash
-cp .env.example .env
+## ⚙️ Environment Variables
+
+Create a `.env` file:
+
+```
+PORT=5000
+DATABASE_URL=postgresql://user:password@localhost:5432/medibridge
+
+JWT_SECRET=your_jwt_secret
+JWT_EXPIRES_IN=7d
+
+BCRYPT_SALT_ROUNDS=10
+
+CLIENT_URL=http://localhost:3000
 ```
 
-Run the development server:
+---
+
+## 🧱 Prisma Setup
 
 ```bash
-# using npm
+npx prisma generate
+npx prisma migrate dev
+```
+
+---
+
+## ▶️ Run Development Server
+
+```bash
 npm run dev
+```
 
-# using yarn
-yarn dev
+Server runs at:
 
-# using pnpm
-pnpm dev
+```
+http://localhost:4000
 ```
 
 ---
 
-## Folder Structure
+## 📡 API Structure
 
 ```
-Prisma-Blog/
-│── node_modules/          # Dependencies
-│── src/
-│   ├── app.ts             # Express app configuration
-│   ├── server.ts          # Server entry point
-│   ├── config/            # Environment & configuration files
-│   └── modules/           # Application modules (posts, users, etc.)
-│── package.json           # Project metadata & scripts
-│── pnpm-lock.yaml         # Lockfile (pnpm)
-│── tsconfig.json          # TypeScript configuration
-│── README.md              # Documentation
+/api/v1/auth
+/api/v1/users
+/api/v1/doctors
+/api/v1/appointments
+/api/v1/schedules
 ```
 
 ---
 
-## Scripts
+## 🔐 Authentication Flow
+
+- JWT-based authentication
+- Access token required for protected routes
+- Role-based middleware (patient, doctor, admin)
+
+---
+
+## 📁 Project Structure
+
+```
+src/
+ ├── config/
+ ├── jobs/
+ ├── helper/
+ ├── libs/
+ ├── modules/
+ │    ├── auth/
+ │    ├── users/
+ │    ├── doctors/
+ │    ├── appointments/
+ │    └── schedules/
+ ├── middlewares/
+ ├── utils/
+ ├── app.ts
+ └── server.ts
+```
+
+---
+
+## 🧪 Scripts
 
 ```bash
-# Run in development mode
-pnpm dev
-
-# Build for production
-pnpm build
-
-# Run production build
-pnpm start
+npm run dev
+npm run build
+npm run start
+npm run lint
 ```
-
----
 
 ## Important Docs Link
 
 - Project Overview - [https://docs.google.com/document/d/1oJNhs9dYbdlLBxWPY2MuMxhHNZJTXlWZfPhXs5dtdSc/edit?tab=t.tpbf5nj3qoz4]
 - ERD Diagram - [https://lucid.app/lucidchart/df76cc55-7f6a-4d21-93bf-bfc31eafff5e/edit?view_items=~LW0iTMIlcXW&page=0_0&invitationId=inv_e7b0e1a3-93fa-4c69-a627-d2c84f55a706]
+
+---
+
+## 📄 License
+
+MIT
