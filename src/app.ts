@@ -16,6 +16,7 @@ import { paymentRoute } from "./modules/payments/payment.route.js";
 import { dashboardRoute } from "./modules/dashboard/dashboard.route.js";
 import prescriptionRoutes from "./modules/prescriptions/prescriptions.routes.js";
 import { transactionRoute } from "./modules/transactions/transaction.route.js";
+import { AgentRoutes } from "./modules/aiAgent/aiAgent.routes.js";
 const app = express();
 
 // Middleware
@@ -32,6 +33,7 @@ app.use(cookieParser());
 
 app.use(morgan("tiny"));
 
+app.use("/api/v1/ai-agent", AgentRoutes);
 app.use("/api/v1/transactions", transactionRoute);
 app.use("/api/v1/dashboard", dashboardRoute);
 app.use("/api/v1/payments", paymentRoute);

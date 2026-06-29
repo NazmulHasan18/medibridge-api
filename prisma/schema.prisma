@@ -326,3 +326,23 @@ model Meeting {
   appointment   Appointment @relation(fields: [appointmentId], references: [id])
   createdAt     DateTime    @default(now())
 }
+
+// ===========================Conversation Model===========================
+model Conversation {
+  id        String    @id @default(cuid())
+  patientId String
+  messages  Message[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+// ===========================Message Model===========================
+model Message {
+  id             String   @id @default(cuid())
+  conversationId String
+  role           String
+  content        String
+  createdAt      DateTime @default(now())
+
+  conversation Conversation @relation(fields: [conversationId], references: [id])
+}

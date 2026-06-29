@@ -31,4 +31,6 @@ export const config = {
   // resend
   resendApiKey: process.env.RESEND_API_KEY as string,
   mailFrom: process.env.MAIL_FROM as string,
+  // openAi
+  groq_api_key: process.env.GROQ_API_KEY as string,
 };

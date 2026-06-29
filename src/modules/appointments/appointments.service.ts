@@ -10,25 +10,12 @@ import {
 import { config } from "../../config/index.js";
 import { createGoogleMeet } from "../../helpers/generateMeetLink.js";
 import { sendEmail } from "../../helpers/sendEmail.js";
+import { createAppointmentPayload } from "./appointments.types.js";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CREATE APPOINTMENT  →  initiate payment
 // ─────────────────────────────────────────────────────────────────────────────
-const createAppointment = async (
-  userId: number,
-  payload: {
-    doctorId: number;
-    slotId: number;
-    patientId?: number;
-    patientName: string;
-    relation: string;
-    gender?: string;
-    dateOfBirth?: string;
-    consultationType: ConsultationType;
-    appointmentDate: string;
-    notes?: string;
-  },
-) => {
+const createAppointment = async (userId: number, payload: createAppointmentPayload) => {
   const {
     doctorId,
     slotId,

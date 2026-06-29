@@ -217,6 +217,7 @@ const getAllAvailableDoctor = async ({
 
   const endOfDay = new Date(requestedDate);
   endOfDay.setHours(23, 59, 59, 999);
+  console.log({ requestedDate, startOfDay, endOfDay });
 
   // ==========================================================
   // Step 1: Check requested date

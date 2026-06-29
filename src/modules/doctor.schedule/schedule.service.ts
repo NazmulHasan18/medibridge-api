@@ -241,7 +241,7 @@ const generateSlots = async (doctorPublicId: string, scheduleId: number, input: 
  */
 const getSlotsByDoctor = async (doctorPublicId: string, query: GetSlotsByDoctorQuery) => {
   const doctor = await resolveDoctorByPublicId(doctorPublicId);
-
+  console.log(query);
   const page = Number(query.page) || 1;
   const limit = Number(query.limit) || 10;
 
@@ -258,12 +258,20 @@ const getSlotsByDoctor = async (doctorPublicId: string, query: GetSlotsByDoctorQ
       isCancelled: false,
     }),
 
-    ...(query.date && {
-      startTime: {
-        gte: new Date(`${query.date}T00:00:00`),
-        lte: new Date(`${query.date}T23:59:59`),
-      },
-    }),
+    ...(query.date &&
+      query.date.includes("T") && {
+        startTime: {
+          gte: new Date(`${query.date?.split("T")[0]}T00:00:00`),
+          lte: new Date(`${query.date?.split("T")[0]}T23:59:59`),
+        },
+      }),
+    ...(query.date &&
+      !query.date.includes("T") && {
+        startTime: {
+          gte: new Date(`${query.date}T00:00:00`),
+          lte: new Date(`${query.date}T23:59:59`),
+        },
+      }),
   };
 
   const [slots, total] = await prisma.$transaction([
